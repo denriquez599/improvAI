@@ -1,10 +1,15 @@
 // src/MidiInput.tsx
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import useMidi, { MidiMessage } from '../pages/api/useMidi';
 import { getNoteName } from '../utils/midiUtils';
 
-const MidiInput: React.FC = () => {
-  const { midiAccess, midiMessages, error } = useMidi();
+interface MidiInputProps {
+  isListening: boolean;
+}
+
+const MidiInput: React.FC<MidiInputProps> = ({ isListening }) => {
+  const { midiAccess, midiMessages } = useMidi();
+  const [recentNote, setRecentNote] = useState<string | null>(null);
 
   const getNoteFromMessage = (message: MidiMessage): string | null => {
     if (message.data[0] === 144) { // Note On message
@@ -14,28 +19,22 @@ const MidiInput: React.FC = () => {
     return null;
   };  
 
+  // Effect to update recent note whenever midiMessages change
+  useEffect(() => {
+    if (midiMessages.length > 0) {
+      const lastMessage = midiMessages[midiMessages.length - 1]; // Get the most recent message
+      const note = getNoteFromMessage(lastMessage);
+      console.log(note);
+      if (note) {
+        setRecentNote(note); // Update recent note state
+      }
+    }
+  }, [midiMessages]); // Dependency array includes midiMessages
+
   return (
     <div>
-      <h1>MIDI Input</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {midiAccess ? (
-        <p>MIDI Access obtained.</p>
-      ) : (
-        <p>No MIDI Access.</p>
-      )}
-      <ul>
-        {midiMessages.map((message, index) => {
-            const note = getNoteFromMessage(message);
-            if (note) {
-            return (
-                <li key={index}>
-                {`Timestamp: ${message.timestamp}, Note: ${note}`}
-                </li>
-            );
-            }
-            return null;
-        })}
-      </ul>
+      {!isListening && <p>{midiAccess?.inputs.size != 0 ? 'Connected.' : 'Connect MIDI device.'}</p>}
+      <p>{isListening && recentNote}</p>
     </div>
   );
 };
