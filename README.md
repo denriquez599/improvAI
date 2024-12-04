@@ -23,10 +23,12 @@ To set up and start the **FastAPI server**:
 1. Navigate to the API directory:
    ```bash
    cd jazz-app/magenta-api
-
+    ```
 2.	Start the FastAPI server using uvicorn:
-uvicorn main:app --reload
-	•	The --reload flag enables automatic server reload when you make changes to the code.
+    ```bash
+    uvicorn main:app --reload
+    ````
+	-	The --reload flag enables automatic server reload when you make changes to the code.
 
 3.	The server will be accessible at the URL mentioned in the terminal (e.g., http://127.0.0.1:8000).
 
@@ -34,23 +36,25 @@ uvicorn main:app --reload
 
 To set up the web environment:
 1.	Ensure Node.js and npm are installed:
-	•	Node.js Installation:
-	    •   Download and install from Node.js Official Website.
-	•	Confirm installation:
+	-	Node.js Installation:
+	    -   Download and install from Node.js Official Website.
+	-	Confirm installation:
     ```bash
     node -v
     npm -v
+    ```
 2. Start the application:
     ```bash
     npm run dev
+    ```
 3.	Open your browser and navigate to the localhost address mentioned in the terminal (e.g., http://localhost:3000).
 
 ## Using the Application
 
 To use the JazzApp:
 1.	Connect Your MIDI Device:
-	•	Plug your MIDI device into your computer.
-2.	Open a Compatible Browser:
-	•	Use a Chrome browser for the best experience.
-	•	Do not use Safari, as it is not fully supported.
+	-	Plug your MIDI device into your computer.
+    -	Open a Compatible Browser:
+	-	Use a Chrome browser for the best experience.
+	-	Do not use Safari, as it is not fully supported.
 3.	Access the application through the web interface and start making music!
