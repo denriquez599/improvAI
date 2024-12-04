@@ -1,10 +1,13 @@
 import React from 'react';
+import songArray, { Song } from './MidiFiles';
 
 interface SidebarProps {
   setPage: (page: string) => void;
+  setSong: (song: Song) => void;
+  song: Song;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ setPage }) => {
+const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, song}) => {
   return (
     <aside className="w-1/4 bg-black p-4 space-y-4">
       <div className="space-y-">
@@ -13,12 +16,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage }) => {
         </button>
           <p className="text-gray-400 flex flex-col mb-2">Setlist</p>
           <ul className="text-spotifyLightGrey space-y-1">
-            <li className='hover:cursor-pointer hover:text-white'>True Blue</li>
-            <li className='hover:cursor-pointer hover:text-white'>Road Song</li>
-            <li className='hover:cursor-pointer hover:text-white'>Romantic Warrior</li>
-            <li className='hover:cursor-pointer hover:text-white'>Sunday at the Village Vanguard</li>
-            <li className='hover:cursor-pointer hover:text-white'>Undercurrent</li>
-            <li className='hover:cursor-pointer hover:text-white'>Tutu</li>
+            {songArray.map((song, index) => (
+              <li key={index} onClick={() => { setPage("Improvise"); setSong(song); }} className="hover:cursor-pointer hover:text-white">{song.title}</li>
+            ))}
           </ul>
       </div>
     </aside>

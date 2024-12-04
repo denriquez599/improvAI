@@ -8,17 +8,19 @@ import { useState } from "react";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import Improv from "@/components/Improv";
+import songArray, { Song } from "@/components/MidiFiles";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [page, setPage] = useState<string>("Home Page");
+  const [song, setSong] = useState<Song>(songArray[0]);
   return (
     <div className='flex h-screen bg-gradient-to-b from-spotifyGrey to-blackground'>
       {/* {page == "Home Page" && <HomePage />} */}
-      <Sidebar setPage={setPage} />
-      {page == "Home Page" && <HomePage setPage={setPage}/>}
-      {page == "Improvise" && <Improv/>}
+      <Sidebar setPage={setPage} setSong={setSong} song={song}/>
+      {page == "Home Page" && <HomePage setSong={setSong} setPage={setPage}/>}
+      {page == "Improvise" && <Improv setSong={setSong} song={song}/>}
       <Footer />
     </div>
   );

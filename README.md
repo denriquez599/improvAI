@@ -1,40 +1,56 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# JazzApp Setup and Usage Guide
 
-## Getting Started
+Welcome to JazzApp!
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Magenta Environment
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To set up the Magenta environment:
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+1. Follow the instructions provided in the official Magenta README:
+   - [Magenta Setup Instructions](https://github.com/magenta/magenta/blob/main/README.md)
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+2. If the above instructions do not work, refer to these helpful troubleshooting steps:
+   - [Magenta Issue 2047 - Valuable Troubleshooting Steps](https://github.com/magenta/magenta/issues/2047#issuecomment-1543717428)
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Python Environment
 
-## Learn More
+To set up and start the **FastAPI server**:
 
-To learn more about Next.js, take a look at the following resources:
+1. Navigate to the API directory:
+   ```bash
+   cd jazz-app/magenta-api
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2.	Start the FastAPI server using uvicorn:
+uvicorn main:app --reload
+	•	The --reload flag enables automatic server reload when you make changes to the code.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+3.	The server will be accessible at the URL mentioned in the terminal (e.g., http://127.0.0.1:8000).
 
-## Deploy on Vercel
+## Web Environment
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+To set up the web environment:
+1.	Ensure Node.js and npm are installed:
+	•	Node.js Installation:
+	    •   Download and install from Node.js Official Website.
+	•	Confirm installation:
+    ```bash
+    node -v
+    npm -v
+2. Start the application:
+    ```bash
+    npm run dev
+3.	Open your browser and navigate to the localhost address mentioned in the terminal (e.g., http://localhost:3000).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Using the Application
+
+To use the JazzApp:
+1.	Connect Your MIDI Device:
+	•	Plug your MIDI device into your computer.
+2.	Open a Compatible Browser:
+	•	Use a Chrome browser for the best experience.
+	•	Do not use Safari, as it is not fully supported.
+3.	Access the application through the web interface and start making music!

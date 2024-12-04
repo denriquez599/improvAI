@@ -1,16 +1,8 @@
 import React from 'react';
+import songArray, { Song } from './MidiFiles';
 
-const songArray = [
-  { title: 'True Blue', cover: '/trueBlue.jpg' },
-  { title: 'Tutu', cover: 'tutu.jpg' },
-  { title: 'Road Song', cover: 'roadSong.jpg' },
-  { title: 'Undercurrent', cover: 'undercurrent.jpg' },
-  { title: 'Romantic Warrior', cover: 'romanticWarrior.jpg' },
-  { title: 'Sunday at the Village...', cover: 'sunday.jpg' },
-  { title: 'The Sidewinder', cover: 'sidewinder.jpg' }
-];
+const HomePage: React.FC<{ setPage: (page: string) => void, setSong: (song: Song) => void}> = ({ setPage, setSong }) => {
 
-const HomePage: React.FC<{ setPage: (page: string) => void }> = ({ setPage }) => {
   function handleImproviseClick(event: React.MouseEvent<HTMLButtonElement>): void {
     setPage('Improvise');
   }
@@ -61,7 +53,7 @@ const HomePage: React.FC<{ setPage: (page: string) => void }> = ({ setPage }) =>
           <h2 className="text-xl text-white font-bold mb-4">Set List</h2>
           <div className="flex gap-4 w-full max-w-6xl overflow-x-auto no-scrollbar">
             {songArray.map((song, index) => (
-              <button key={index} onClick={() => setPage("Improvise")} className="flex-shrink-0 hover:opacity-90 bg-spotifyGrey rounded-md pb-2 items-center space-y-2 h-fit w-48">
+              <button key={index} onClick={() => { setPage("Improvise"); setSong(song); }} className="flex-shrink-0 hover:opacity-90 bg-spotifyGrey rounded-md pb-2 items-center space-y-2 h-fit w-48">
                 <div className="w-48 h-48 rounded-md overflow-hidden">
                   <img src={song.cover} alt={`${song.title} cover`} className="w-full h-full object-contain rounded-md" />
                 </div>
