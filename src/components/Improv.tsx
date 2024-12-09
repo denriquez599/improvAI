@@ -21,38 +21,56 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
 
   const fetchRhythmScore = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/v1/rhythm?value=${midiFile}&input=${userMidi}`);
+      const midiPath = song.midi;
+      const midiFileName = midiPath.split('/').pop();
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/v1/rhythm?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
+      );
+  
       if (!response.ok) {
         throw new Error('Failed to fetch rhythm score');
       }
-      const score = await response.json();
-      setUserRhythmScore(score);
+  
+      const result = await response.json();
+  
+      if (result.error) {
+        throw new Error(result.error);
+      }
+  
+      setUserRhythmScore(result || 0);
     } catch (error) {
       console.error('Error fetching rhythm score:', error);
+      setUserRhythmScore(-1);
     }
   };
 
   const fetchOriginalityScore = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/originality');
-      if (!response.ok) {
-        throw new Error('Failed to fetch originality score');
+      const midiPath = song.midi;
+      const midiFileName = midiPath.split('/').pop();
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/v1/tonality?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
+      );      if (!response.ok) {
+        throw new Error('Failed to fetch tonality score');
       }
       const score = await response.json();
-      setUserOriginalityScore(score);
+      setUserOriginalityScore(score || 0);
     } catch (error) {
-      console.error('Error fetching originality score:', error);
+      console.error('Error fetching tonality score:', error);
     }
   };
 
   const fetchUserMusicalityScore = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:8000/api/v1/musicality');
-      if (!response.ok) {
+      const midiPath = song.midi;
+      const midiFileName = midiPath.split('/').pop();
+      const response = await fetch(
+        `http://127.0.0.1:8000/api/v1/musicality?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
+      );      if (!response.ok) {
         throw new Error('Failed to fetch musicality score');
       }
       const score = await response.json();
-      setUserMusicalityScore(score);
+      setUserMusicalityScore(score || 0);
     } catch (error) {
       console.error('Error fetching musicality score:', error);
     }
@@ -122,7 +140,7 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
           {showCircles && (
             <div className="flex flex-col justify-center capitalize items-center ml-8">
               <div className="flex space-x-4 mb-2">
-                {Object.entries({'musicality': userMusicalityScore, 'rhythm': userRhythmScore, 'originality': userOriginalityScore}).map(([key, value]) => (
+                {Object.entries({'musicality': userMusicalityScore, 'rhythm': userRhythmScore, 'tonality': userOriginalityScore}).map(([key, value]) => (
                   <div
                     key={key}
                     className="flex items-center flex-col justify-center w-36 h-36 border-2 rounded-full bg-transparent border-spotifyLightGrey"

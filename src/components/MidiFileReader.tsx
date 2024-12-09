@@ -24,7 +24,6 @@ const MidiReader: React.FC = () => {
     return <p>Loading...</p>;
   }
 
-  // Function to get note name based on note number
   const getNoteName = (noteNumber: number): string => {
     const noteNames = [
       'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'
@@ -34,7 +33,6 @@ const MidiReader: React.FC = () => {
     return `${noteNames[note]}${octave}`;
   };
 
-  // Extract note names and instrument information from MIDI data
   const extractNoteData = () => {
     const trackData: { notes: string[]; instrument: string }[] = [];
 

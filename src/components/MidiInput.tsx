@@ -21,7 +21,7 @@ const MidiInput: React.FC<MidiInputProps> = ({ isListening }) => {
         body: JSON.stringify({
           messages: messages.map((msg) => ({
             data: Array.from(msg.data),
-            timestamp: msg.timestamp - normalizedTimestamp, // Normalize timestamps
+            timestamp: msg.timestamp - normalizedTimestamp,
           })),
         }),
       });
@@ -56,7 +56,7 @@ const MidiInput: React.FC<MidiInputProps> = ({ isListening }) => {
     if (prevIsListening && !isListening) {
       if (messageBuffer.length > 0) {
         sendMidiToBackend(messageBuffer).then(() => notifyWriteMidi());
-        setMessageBuffer([]); // Clear buffer after sending
+        setMessageBuffer([]);
       }
     }
     setPrevIsListening(isListening);

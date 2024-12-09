@@ -31,6 +31,7 @@ To set up and start the **FastAPI server**:
 	-	The --reload flag enables automatic server reload when you make changes to the code.
 
 3.	The server will be accessible at the URL mentioned in the terminal (e.g., http://127.0.0.1:8000).
+4.  If there are any issues, please see the requirements.txt file in jazz-app/magenta-api.
 
 ## Web Environment
 

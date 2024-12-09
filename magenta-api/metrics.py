@@ -133,6 +133,6 @@ def compare_midi_files(midi_path1, midi_path2):
         "key2": key2,
     }
 
-midi_file1 = "./AutumnLeaves.mid"
-midi_file2 = "./bad.mid"
+midi_file1 = "./Tutu.mid"
+midi_file2 = "./AutumnLeaves.mid"
 result = compare_midi_files(midi_file1, midi_file2)

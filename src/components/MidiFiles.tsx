@@ -6,13 +6,13 @@ export interface Song {
   }
   
 const songArray: Song[] = [
-    // { title: 'True Blue', cover: '/trueBlue.jpg', midi: 'midiFiles/TrueBlue.mid', artist: 'Tina Brooks' },
     { title: 'Tutu', cover: '/tutu.jpg', midi: 'midiFiles/Tutu.mid', artist: 'Miles Davis' },
-    // { title: 'Road Song', cover: '/roadSong.jpg', midi: 'midiFiles/RoadSong.mid', artist: 'Wes Montgomery' },
-    // { title: 'Undercurrent', cover: '/undercurrent.jpg', midi: 'midiFiles/Undercurrent.mid', artist: 'Bill Evans' },
-    // { title: 'Romantic Warrior', cover: '/romanticWarrior.jpg', midi: 'midiFiles/RomanticWarrior.mid', artist: 'Return to Forever' },
-    // { title: 'Sunday at the Village...', cover: '/sunday.jpg', midi: 'midiFiles/Sunday.mid', artist: 'Bill Evans' },
-    // { title: 'The Sidewinder', cover: '/sidewinder.jpg', midi: 'midiFiles/Sidewinder.mid', artist: 'Lee Morgan' }
+    { title: 'Autumn Leaves', cover: '/autumnLeaves.jpg', midi: 'midiFiles/AutumnLeaves.mid', artist: 'Bill Evans' },
+    { title: 'Nardis', cover: '/nardis.jpg', midi: 'midiFiles/Nardis.mid', artist: 'Bill Evans' },
+    { title: 'All Of Me', cover: '/allOfMe.jpeg', midi: 'midiFiles/AllOfMe.mid', artist: 'Matsayoshi Takanaka'},
+    { title: 'There Will Never Be Another You', cover: '/thereWillNeverBeAnotherYou.jpg', midi: 'midiFiles/ThereWillNeverBeAnotherYou.mid', artist: 'Chet Baker'},
+    { title: '55 Dive', cover: '/55Dive.jpeg', midi: 'midiFiles/55Dive.mid', artist: 'Mike Stern'},
+
 ];
 
 export default songArray;

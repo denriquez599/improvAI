@@ -19,8 +19,8 @@ const ListeningIndicator: React.FC<ListeningIndicatorProps> = ({ setIsListening,
         setIsListening(false);
         onListeningComplete();
       }} 
-      className="flex space-x-1 h-10 items-end focus:outline-none" // Add focus:outline-none to remove default button outline
-      style={{ background: 'transparent', border: 'none', cursor: 'pointer' }} // Button style
+      className="flex space-x-1 h-10 items-end focus:outline-none"
+      style={{ background: 'transparent', border: 'none', cursor: 'pointer' }}
     >
       <motion.div
         className="w-1 bg-spotifyLightGrey"
