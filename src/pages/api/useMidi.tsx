@@ -11,7 +11,7 @@ const useMidi = () => {
 
   useEffect(() => {
     if (navigator.requestMIDIAccess) {
-      navigator.requestMIDIAccess().then(onMIDISuccess, onMIDIFailure);
+      (navigator.requestMIDIAccess({sysex: true}) as Promise<WebMidi.MIDIAccess>).then(onMIDISuccess, onMIDIFailure);
     } else {
       console.error('Web MIDI API is not supported in this browser.');
     }

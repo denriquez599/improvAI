@@ -17,10 +17,11 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
   const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
   const [userOriginalityScore, setUserOriginalityScore] = useState<number>(0);
   const [userMusicalityScore, setUserMusicalityScore] = useState<number>(0);
+  const [userMidi, setUserMidi] = useState<string | null>(null);
 
   const fetchRhythmScore = async () => {
     try {
-      const response = await fetch(`http://127.0.0.1:8000/api/v1/rhythm?value=${midiFile}`);
+      const response = await fetch(`http://127.0.0.1:8000/api/v1/rhythm?value=${midiFile}&input=${userMidi}`);
       if (!response.ok) {
         throw new Error('Failed to fetch rhythm score');
       }
