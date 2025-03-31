@@ -22,10 +22,31 @@ const ImprovRecorder: React.FC<ImprovRecorderProps> = ({ handleImproviseClick, h
       audioChunksRef.current.push(e.data);
     };
 
+    const sendToApi = async (audioBlob: Blob) => {
+        const formData = new FormData();
+        formData.append('file', audioBlob, 'recording.wav');
+        try {
+          const response = await fetch('http://url.com/endpoint', {
+            method: 'POST',
+            body: formData,
+          });
+          
+          if (!response.ok) {
+            throw new Error('Upload failed');
+          }
+      
+          const result = await response.json();
+          console.log('Upload success:', result);
+        } catch (err) {
+          console.error('Error uploading audio:', err);
+        }
+      };
+
     mediaRecorder.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
       const url = URL.createObjectURL(audioBlob);
       setAudioUrl(url);
+      sendToApi(audioBlob);
     };
 
     mediaRecorderRef.current = mediaRecorder;
