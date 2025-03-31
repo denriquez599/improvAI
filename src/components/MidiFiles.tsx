@@ -12,7 +12,7 @@ const songArray: Song[] = [
     { title: 'All Of Me', cover: '/allOfMe.jpeg', midi: 'midiFiles/AllOfMe.mid', artist: 'Matsayoshi Takanaka'},
     { title: 'There Will Never Be Another You', cover: '/thereWillNeverBeAnotherYou.jpg', midi: 'midiFiles/ThereWillNeverBeAnotherYou.mid', artist: 'Chet Baker'},
     { title: '55 Dive', cover: '/55Dive.jpeg', midi: 'midiFiles/55Dive.mid', artist: 'Mike Stern'},
-    { title: 'Tinkle', cover: '/55Dive.jpg', midi: 'midiFiles/twinkle2correct.mid', artist: 'Dizzy Gillespie'},
+    { title: 'Twinkle', cover: '/twinkle.jpg', midi: 'midiFiles/twinkle2correct.mid', artist: 'Little Star'},
 
 ];
 

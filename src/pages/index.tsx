@@ -24,7 +24,6 @@ export default function Home() {
       {page == "Home Page" && <HomePage setSong={setSong} setPage={setPage} setLesson={setLesson}/>}
       {page == "Improvise" && <Improv setSong={setSong} song={song}/>}
       {page == "Lesson Plan" && <LessonPlan lesson={lesson}/>}
-      <Footer />
     </div>
   );
 }

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@magenta/music": "^1.23.1",
+    "@tonejs/midi": "^2.0.28",
     "@types/webmidi": "^2.1.0",
     "framer-motion": "^11.11.10",
     "midi-file": "^1.2.4",
@@ -19,7 +20,8 @@
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
-    "react-midi-player": "^1.0.8"
+    "react-midi-player": "^1.0.8",
+    "tone": "^15.0.4"
   },
   "devDependencies": {
     "@types/node": "^20",
