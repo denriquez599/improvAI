@@ -3,6 +3,8 @@ import ListeningIndicator from './ListeningIndicator';
 import MidiInput from './MidiInput';
 import MidiPlayer from 'react-midi-player';
 import { Song } from './MidiFiles';
+import AudioRecorder from './AudioRecorder';
+import ImprovRecorder from './AudioRecorder';
 
 interface ImprovProps {
   lesson: Song[];
@@ -11,7 +13,7 @@ interface ImprovProps {
 const Improv: React.FC<ImprovProps> = ({ lesson }) => {
   const [isListening, setIsListening] = useState(false);
   const [showCircles, setShowCircles] = useState(false);
-  const [midiFile, setMidiFile] = useState<string | null>(null);
+  const [midiFile, setMidiFile] = useState<string | null>(lesson[0].midi);
   const [autoplay, setAutoplay] = useState(false);
   const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
   const [userOriginalityScore, setUserOriginalityScore] = useState<number>(0);
@@ -135,16 +137,7 @@ const Improv: React.FC<ImprovProps> = ({ lesson }) => {
               <MidiInput isListening={isListening} />
             </div>
             <div className="flex items-center justify-center">
-              {!isListening && (
-                <button
-                  className={`px-8 py-4 bg-spotifyGrey hover:bg-spotifyLightGrey border border-white text-white text-2xl rounded-md ${
-                    midiFile === null ? 'opacity-50' : ''
-                  }`}
-                  onClick={handleImproviseClick}
-                >
-                  Improvise
-                </button>
-              )}
+              
               {midiFile && isListening && (
                 <div className="hidden">
                   <MidiPlayer
@@ -154,7 +147,7 @@ const Improv: React.FC<ImprovProps> = ({ lesson }) => {
                   />
                 </div>
               )}
-              {isListening && <ListeningIndicator onListeningComplete={handleListeningComplete} setIsListening={setIsListening} />}
+            <ImprovRecorder handleListeningComplete={handleListeningComplete} handleImproviseClick={handleImproviseClick}/>
             </div>
             </div>
           </div>

@@ -3,6 +3,7 @@ import ListeningIndicator from './ListeningIndicator';
 import MidiInput from './MidiInput';
 import MidiPlayer from 'react-midi-player';
 import { Song } from './MidiFiles';
+import ImprovRecorder from './AudioRecorder';
 
 interface ImprovProps {
   song: Song;
@@ -115,16 +116,6 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
               <MidiInput isListening={isListening} />
             </div>
             <div className="flex items-center justify-center">
-              {!isListening && (
-                <button
-                  className={`px-8 py-4 bg-spotifyGrey hover:bg-spotifyLightGrey border border-white text-white text-2xl rounded-md ${
-                    midiFile === null ? 'opacity-50' : ''
-                  }`}
-                  onClick={handleImproviseClick}
-                >
-                  Improvise
-                </button>
-              )}
               {midiFile && isListening && (
                 <div className="hidden">
                   <MidiPlayer
@@ -134,7 +125,8 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
                   />
                 </div>
               )}
-              {isListening && <ListeningIndicator onListeningComplete={handleListeningComplete} setIsListening={setIsListening} />}
+              <ImprovRecorder handleListeningComplete={handleListeningComplete} handleImproviseClick={handleImproviseClick}/>
+
             </div>
           </div>
           {showCircles && (
