@@ -3,10 +3,11 @@ import ListeningIndicator from './ListeningIndicator';
 
 interface ImprovRecorderProps {
   handleImproviseClick: () => void;
-  handleListeningComplete: () => void;
+  handleListeningComplete: (response: any) => void;
+  handlePlayingComplete: () => void;
 }
 
-const ImprovRecorder: React.FC<ImprovRecorderProps> = ({ handleImproviseClick, handleListeningComplete }) => {
+const ImprovRecorder: React.FC<ImprovRecorderProps> = ({ handleImproviseClick, handleListeningComplete, handlePlayingComplete }) => {
   const [recording, setRecording] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
@@ -23,24 +24,25 @@ const ImprovRecorder: React.FC<ImprovRecorderProps> = ({ handleImproviseClick, h
     };
 
     const sendToApi = async (audioBlob: Blob) => {
-        const formData = new FormData();
-        formData.append('file', audioBlob, 'recording.wav');
-        try {
-          const response = await fetch('http://url.com/endpoint', {
-            method: 'POST',
-            body: formData,
-          });
-          
-          if (!response.ok) {
-            throw new Error('Upload failed');
-          }
-      
-          const result = await response.json();
-          console.log('Upload success:', result);
-        } catch (err) {
-          console.error('Error uploading audio:', err);
+      const formData = new FormData();
+      formData.append('file', audioBlob, 'recording.wav');
+      try {
+        const response = await fetch('http://127.0.0.1:8000/judge/song', {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (!response.ok) {
+          throw new Error('Upload failed');
         }
-      };
+
+        const result = await response.json();
+        handleListeningComplete(result)
+        console.log('Upload success:', result);
+      } catch (err) {
+        console.error('Error uploading audio:', err);
+      }
+    };
 
     mediaRecorder.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
@@ -62,8 +64,9 @@ const ImprovRecorder: React.FC<ImprovRecorderProps> = ({ handleImproviseClick, h
   };
 
   const onListeningComplete = () => {
-      stopRecording();
-    };
+    handlePlayingComplete();
+    stopRecording();
+  };
 
   return (
     <div className="flex flex-col items-center justify-center p-6 rounded-lg shadow-lg bg-spotifyGrey text-white w-full max-w-lg">
@@ -87,15 +90,15 @@ const ImprovRecorder: React.FC<ImprovRecorderProps> = ({ handleImproviseClick, h
       )}
       {audioUrl && (
         <a
-            href={audioUrl}
-            download="recording.wav"
-            className="px-6 py-3 mt-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded hover:bg-spotifyLightGrey transition"
+          href={audioUrl}
+          download="recording.wav"
+          className="px-6 py-3 mt-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded hover:bg-spotifyLightGrey transition"
         >
-            Download Recording
+          Download Recording
         </a>
-    )}
+      )}
     </div>
-    
+
   );
 };
 

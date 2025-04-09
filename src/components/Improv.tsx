@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import ListeningIndicator from './ListeningIndicator';
 import MidiInput from './MidiInput';
-import MidiPlayer from 'react-midi-player';
+// import MidiPlayer from 'react-midi-player';
+import CustomMidiPlayer from './CustomMidiPlayer';
 import { Song } from './MidiFiles';
 import ImprovRecorder from './AudioRecorder';
 
@@ -12,88 +13,45 @@ interface ImprovProps {
 
 const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
   const [isListening, setIsListening] = useState(false);
-  const [showCircles, setShowCircles] = useState(false);
+  const [showOutput, setShowOutput] = useState(false);
   const [midiFile, setMidiFile] = useState<string | null>(song.midi);
-  const [autoplay, setAutoplay] = useState(false);
   const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
-  const [userOriginalityScore, setUserOriginalityScore] = useState<number>(0);
-  const [userMusicalityScore, setUserMusicalityScore] = useState<number>(0);
-  const [userMidi, setUserMidi] = useState<string | null>(null);
-
-  const fetchRhythmScore = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/v1/rhythm?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
-      );
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch rhythm score');
-      }
-  
-      const result = await response.json();
-  
-      if (result.error) {
-        throw new Error(result.error);
-      }
-  
-      setUserRhythmScore(result || 0);
-    } catch (error) {
-      console.error('Error fetching rhythm score:', error);
-      setUserRhythmScore(-1);
-    }
-  };
-
-  const fetchOriginalityScore = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/v1/tonality?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
-      );      if (!response.ok) {
-        throw new Error('Failed to fetch tonality score');
-      }
-      const score = await response.json();
-      setUserOriginalityScore(score || 0);
-    } catch (error) {
-      console.error('Error fetching tonality score:', error);
-    }
-  };
-
-  const fetchUserMusicalityScore = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/v1/musicality?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
-      );      if (!response.ok) {
-        throw new Error('Failed to fetch musicality score');
-      }
-      const score = await response.json();
-      setUserMusicalityScore(score || 0);
-    } catch (error) {
-      console.error('Error fetching musicality score:', error);
-    }
-  };
-
+  const [userIntonationScore, setUserIntonationScore] = useState<number>(0);
+  const [userOverallScore, setUserOverallScore] = useState<number>(0);
+  const [userTempoScore, setUserTempoScore] = useState<number>(0);
+  const [userTextResults, setUserTextResults] = useState<string>("");
+  const [songIsPlaying, setSongIsPlaying] = useState(false);
 
   const handleImproviseClick = () => {
     setIsListening(true);
-    setShowCircles(false); 
-    setAutoplay(true);
+    setSongIsPlaying(true);
+    setShowOutput(false);
   };
 
-  const handleListeningComplete = () => {
-    setIsListening(false);
-    setShowCircles(true);
-    fetchRhythmScore();
-    fetchOriginalityScore();
-    fetchUserMusicalityScore();
+  const updateScores = (response: any) => {
+    console.log("Updating scores with response:", response)
+    setUserRhythmScore(parseFloat(response.rhythm.toFixed(2)))
+    setUserIntonationScore(parseFloat(response.intonation.toFixed(2)));
+    setUserOverallScore(parseFloat(response.overall_score.toFixed(2)));
+    setUserTempoScore(parseFloat(response.tempo.toFixed(2)));
+    const prettyFeedback = JSON.stringify(response.feedback, null, 2);
+    setUserTextResults(prettyFeedback)
   };
+
+  const handleListeningComplete = (response: any) => {
+    setIsListening(false);
+    updateScores(response)
+    setShowOutput(true);
+  };
+
+  const handlePlayingComplete = () => {
+    setSongIsPlaying(false)
+  }
+
 
   const userImage = 'https://via.placeholder.com/50';
   const userName = 'David';
+
 
   return (
     <div className="items-center w-full h-full justify-center">
@@ -116,23 +74,28 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
               <MidiInput isListening={isListening} />
             </div>
             <div className="flex items-center justify-center">
-              {midiFile && isListening && (
+              {midiFile && isListening && songIsPlaying && (
                 <div className="hidden">
-                  <MidiPlayer
+                  <CustomMidiPlayer
                     src={song.midi}
-                    autoplay={autoplay}
-                    onPlay={() => setAutoplay(false)}
+                    autoplay={true}
+                    onPlay={() => console.log("Playback started")}
+                    onStop={() => setSongIsPlaying(false)}
                   />
                 </div>
               )}
-              <ImprovRecorder handleListeningComplete={handleListeningComplete} handleImproviseClick={handleImproviseClick}/>
+              <ImprovRecorder
+                handleListeningComplete={handleListeningComplete}
+                handleImproviseClick={handleImproviseClick}
+                handlePlayingComplete={handlePlayingComplete}
+              />
 
             </div>
           </div>
-          {showCircles && (
+          {showOutput && (
             <div className="flex flex-col justify-center capitalize items-center ml-8">
               <div className="flex space-x-4 mb-2">
-                {Object.entries({'musicality': userMusicalityScore, 'rhythm': userRhythmScore, 'tonality': userOriginalityScore}).map(([key, value]) => (
+                {Object.entries({ 'overall_score': userOverallScore, 'rhythm': userRhythmScore, 'intonation': userIntonationScore, 'tempo': userTempoScore }).map(([key, value]) => (
                   <div
                     key={key}
                     className="flex items-center flex-col justify-center w-36 h-36 border-2 rounded-full bg-transparent border-spotifyLightGrey"
@@ -141,6 +104,14 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
                     <span className="font-bold text-2xl">{value}</span>
                   </div>
                 ))}
+              </div>
+              <div className="mt-4 p-4 bg-spotifyGrey rounded-lg shadow-md text-center h-1/2 text-white max-w-md">
+                <span className="text-lg font-bold text-spotifyLightGrey block mb-2">
+                  Here's what we think:
+                </span>
+                <div className='whitespace-nowrap overflow-y-scroll'>
+                  <p className=''>{userTextResults || "No additional information available."}</p>
+                  </div>
               </div>
             </div>
           )}
