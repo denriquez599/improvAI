@@ -14,9 +14,12 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
   const [songIsPlaying, setSongIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const [isRecording, setIsRecording] = useState(false);
+
   // On startup, create the audioRef
   useEffect(() => {
     const audio = new Audio(song.wav);
+    audio.loop = true;
     audioRef.current = audio;
   }, []);
 
@@ -67,6 +70,7 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
 
   // What happens when record is clicked
   const handleClickRecord = () => {
+    setIsRecording(true)
     setShowJudgementOutput(false);
     playMetronomeClicksAndStartSong(song.beatsPerMinute, song.beatsPerMeasure);
   };
@@ -85,6 +89,7 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
 
   // What to do when done recording stops (just want to stop music)
   const handleClickStopRecord = () => {
+    setIsRecording(false)
     setSongIsPlaying(false)
   }
 
@@ -104,6 +109,14 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
               <h2 className="text-lg font-semibold">{song.title}</h2>
               <p className="text-gray-400">{song.artist}</p>
             </div>
+            {!isRecording && (
+              <button
+                onClick={() => setSongIsPlaying(!songIsPlaying)}
+                className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md"
+              >
+                {songIsPlaying ? "Stop" : "Preview"}
+              </button>
+            )}
 
             <div className="flex items-center justify-center">
               <PerformanceRecorder

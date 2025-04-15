@@ -3,13 +3,13 @@ import Improv from './Improv';
 import { Song } from './MidiFiles';
 import LearnToPlay from './LearnToPlay';
 import ReactMarkdown from 'react-markdown';
+import lessonPlans, { LessonPlan } from './LessonPlans';
 
 interface LessonPlansPageProps {
-  folder: Song[];
-  description: string;
+  lessonPlan: LessonPlan;
 }
 
-const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ folder, description }) => {
+const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ lessonPlan }) => {
   const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
 
@@ -34,7 +34,7 @@ const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ folder, description }
         <section className="mt-8">
           <h2 className="text-xl text-white font-bold mb-4">Songs in This Lesson Plan</h2>
           <div className="flex gap-8 w-full max-w-6xl overflow-x-auto overflow-y-hidden no-scrollbar">
-            {folder.map((song, idx) => (
+            {lessonPlan.songs.map((song, idx) => (
               <button
                 key={idx}
                 onClick={() => setSelectedSong(song)}
@@ -82,7 +82,7 @@ const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ folder, description }
                 ),
               }}
             >
-              {description}
+              {lessonPlan.description}
             </ReactMarkdown>
           </div>
         </section>

@@ -22,6 +22,7 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
   const [isListeningIndicatorOn, setListeningIndicator] = useState(false);
 
   const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
@@ -30,6 +31,7 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
 
   const sendBlobToApi = async (audioBlob: Blob, filename: string) => {
     console.log("Sending blob to API");
+
     setBusyCalculatingMetrics(true);
     const formData = new FormData();
     formData.append('file', audioBlob, filename);
@@ -65,6 +67,7 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
 
     mediaRecorder.onstop = () => {
       const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+      setDownloadUrl(URL.createObjectURL(audioBlob));
       sendBlobToApi(audioBlob, "recording.wav");
     };
 
@@ -96,12 +99,13 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
     stopMidi();
     setRecordingUsingMidi(false);
     setListeningIndicator(false);
+    setShowDownloadButton(true);
 
     if (midiMessages.length > 0) {
       console.log("MIDI messages recorded:", midiMessages.length);
       const midiBlob = buildMidiFile(midiMessages);
+      setDownloadUrl(URL.createObjectURL(midiBlob));
       sendBlobToApi(midiBlob, "recording.mid");
-      saveMidiFile(midiBlob);
     } else {
       console.log("No MIDI messages recorded.");
     }
@@ -181,9 +185,9 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
       )}
 
 
-      {showDownloadButton && (
+      {showDownloadButton && downloadUrl && (
         <a
-          href={useMidiInput ? "recording.mid" : "recording.wav"}
+          href={downloadUrl}
           download={useMidiInput ? "recording.mid" : "recording.wav"}
           className="px-6 py-3 mt-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded hover:bg-spotifyLightGrey transition"
         >
