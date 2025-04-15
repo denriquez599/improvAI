@@ -1,118 +1,51 @@
 import React, { useState } from 'react';
-import ListeningIndicator from './ListeningIndicator';
-import MidiInput from './MidiInput';
-import MidiPlayer from 'react-midi-player';
+import Improv from './Improv';
 import { Song } from './MidiFiles';
-import AudioRecorder from './AudioRecorder';
-import ImprovRecorder from './AudioRecorder';
+import LearnToPlay from './LearnToPlay';
+import ReactMarkdown from 'react-markdown';
 
-interface ImprovProps {
-  lesson: Song[];
+interface LessonPlansPageProps {
+  folder: Song[];
+  description: string;
 }
 
-const Improv: React.FC<ImprovProps> = ({ lesson }) => {
-  const [isListening, setIsListening] = useState(false);
-  const [showCircles, setShowCircles] = useState(false);
-  const [midiFile, setMidiFile] = useState<string | null>(lesson[0].midi);
-  const [autoplay, setAutoplay] = useState(false);
-  const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
-  const [userOriginalityScore, setUserOriginalityScore] = useState<number>(0);
-  const [userMusicalityScore, setUserMusicalityScore] = useState<number>(0);
-  const [userMidi, setUserMidi] = useState<string | null>(null);
-  const [song, setSong] = useState<Song>(lesson[0]);
+const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ folder, description }) => {
+  const [selectedSong, setSelectedSong] = useState<Song | null>(null);
 
-  const fetchRhythmScore = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/v1/rhythm?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
-      );
-  
-      if (!response.ok) {
-        throw new Error('Failed to fetch rhythm score');
-      }
-  
-      const result = await response.json();
-  
-      if (result.error) {
-        throw new Error(result.error);
-      }
-  
-      setUserRhythmScore(result || 0);
-    } catch (error) {
-      console.error('Error fetching rhythm score:', error);
-      setUserRhythmScore(-1);
-    }
-  };
-
-  const fetchOriginalityScore = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/v1/tonality?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
-      );      if (!response.ok) {
-        throw new Error('Failed to fetch tonality score');
-      }
-      const score = await response.json();
-      setUserOriginalityScore(score || 0);
-    } catch (error) {
-      console.error('Error fetching tonality score:', error);
-    }
-  };
-
-  const fetchUserMusicalityScore = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
-      const response = await fetch(
-        `http://127.0.0.1:8000/api/v1/musicality?midi_file1=${midiFileName}&midi_file2=uploaded_output.mid`
-      );      if (!response.ok) {
-        throw new Error('Failed to fetch musicality score');
-      }
-      const score = await response.json();
-      setUserMusicalityScore(score || 0);
-    } catch (error) {
-      console.error('Error fetching musicality score:', error);
-    }
-  };
-
-
-  const handleImproviseClick = () => {
-    setIsListening(true);
-    setShowCircles(false); 
-    setAutoplay(true);
-  };
-
-  const handleListeningComplete = () => {
-    setIsListening(false);
-    setShowCircles(true);
-    fetchRhythmScore();
-    fetchOriginalityScore();
-    fetchUserMusicalityScore();
-  };
-
-  const userImage = 'https://via.placeholder.com/50';
-  const userName = 'David';
 
   return (
     <div className="items-center w-full h-full justify-center">
-      <div className="flex flex-col items-center justify-center bg-gradient-to-b w-full from-spotifyGrey text-white">
-        <header className="flex justify-between w-full p-4">
-          <button className="text-white"></button>
-          <div className="flex items-center space-x-2">
-            <img src={userImage} alt={userName} className="w-8 h-8 rounded-full" />
-            <span>{userName}</span>
+      {/* Main Content */}
+      <main className="flex-1 p-6 overflow-auto">
+        {/* Header */}
+        <header className="flex justify-between">
+          <h1 className="text-white items-center text-3xl">ImprovAI - Lesson Plan</h1>
+          <div className="text-right">
+            <span className="text-white mr-2">David</span>
+            <img
+              className="inline-block h-12 w-12 rounded-full"
+              src="davidImage.jpeg"
+              alt="User avatar"
+            />
           </div>
         </header>
-        <section className="">
-          <h2 className="text-xl text-white font-bold mb-4">Songs in Lesson Plan</h2>
-          <div className="flex gap-4 w-full max-w-6xl overflow-x-auto no-scrollbar">
-            {lesson.map((song, index) => (
-              <button key={index} onClick={() => setSong(song)} className="flex-shrink-0 hover:opacity-90 bg-spotifyGrey rounded-md pb-2 items-center space-y-2 h-fit w-48">
+
+        {/* Song Thumbnails in Lesson Folder */}
+        <section className="mt-8">
+          <h2 className="text-xl text-white font-bold mb-4">Songs in This Lesson Plan</h2>
+          <div className="flex gap-8 w-full max-w-6xl overflow-x-auto overflow-y-hidden no-scrollbar">
+            {folder.map((song, idx) => (
+              <button
+                key={idx}
+                onClick={() => setSelectedSong(song)}
+                className="flex-shrink-0 hover:opacity-90 bg-spotifyGrey rounded-md pb-2 items-center space-y-2 h-fit w-48"
+              >
                 <div className="w-48 h-48 rounded-md overflow-hidden">
-                  <img src={song.cover} alt={`${song.title} cover`} className="w-full h-full object-contain rounded-md" />
+                  <img
+                    src={song.cover}
+                    alt={`${song.title} cover`}
+                    className="w-full h-full object-contain rounded-md"
+                  />
                 </div>
                 <h3 className="text-white font-semibold text-center text-ellipsis overflow-hidden whitespace-nowrap w-full">
                   {song.title}
@@ -121,55 +54,56 @@ const Improv: React.FC<ImprovProps> = ({ lesson }) => {
             ))}
           </div>
         </section>
-        <div className="flex flex-row">
-          <div className="flex flex-row items-center justify-center mt-4 space-y-4 bg-spotifyGrey h-full rounded-lg p-8 shadow-lg max-w-lg">
-            <div className='flex flex-col items-center justify-center'>
-            <img src={song.cover} alt={song.title} className="rounded-md w-64 h-64" />
-            <div className="text-center">
-              <h2 className="text-lg font-semibold">{song.title}</h2>
-              <p className="text-gray-400">{song.artist}</p>
-            </div>
-            </div>
-            
-            <div className='flex flex-col items-center justify-center'>
 
-            <div className="text-3xl font-bold items-center justify-center text-center mb-8 text-white">
-              <MidiInput isListening={isListening} />
-            </div>
-            <div className="flex items-center justify-center">
-              
-              {midiFile && isListening && (
-                <div className="hidden">
-                  <MidiPlayer
-                    src={song.midi}
-                    autoplay={autoplay}
-                    onPlay={() => setAutoplay(false)}
-                  />
-                </div>
-              )}
-            <ImprovRecorder handleListeningComplete={handleListeningComplete} handleImproviseClick={handleImproviseClick}/>
-            </div>
-            </div>
+        <section className="mt-6 w-full max-w-6xl flex flex-col">
+          <h3 className="text-lg font-semibold text-white mb-2">
+            What your teacher wants you to know about this lesson plan:
+          </h3>
+          <div className="w-full md:w-[576px] p-4 rounded-md bg-spotifyGrey text-white whitespace-pre-line">
+            <ReactMarkdown
+              components={{
+                h1: ({ node, ...props }) => (
+                  <h1 className="text-2xl font-bold mb-2" {...props} />
+                ),
+                h2: ({ node, ...props }) => (
+                  <h2 className="text-xl font-semibold mb-2" {...props} />
+                ),
+                h3: ({ node, ...props }) => (
+                  <h3 className="text-lg font-semibold mb-2" {...props} />
+                ),
+                p: ({ node, ...props }) => (
+                  <p className="mb-2 leading-relaxed" {...props} />
+                ),
+                li: ({ node, ...props }) => (
+                  <li className="list-disc list-inside" {...props} />
+                ),
+                strong: ({ node, ...props }) => (
+                  <strong className="font-bold" {...props} />
+                ),
+              }}
+            >
+              {description}
+            </ReactMarkdown>
           </div>
-          {showCircles && (
-            <div className="flex flex-col justify-center capitalize items-center ml-8">
-              <div className="flex space-x-4 mb-2">
-                {Object.entries({'musicality': userMusicalityScore, 'rhythm': userRhythmScore, 'tonality': userOriginalityScore}).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex items-center flex-col justify-center w-36 h-36 border-2 rounded-full bg-transparent border-spotifyLightGrey"
-                  >
-                    <span className="text-lg text-spotifyLightGrey">{key}</span>
-                    <span className="font-bold text-2xl">{value}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
+        </section>
+
+        {/* Conditionally render Improv component */}
+        {selectedSong?.type === 'improv' && (
+          <div className="mt-12">
+            <Improv song={selectedSong} setSong={setSelectedSong} />
+          </div>
+        )}
+
+        {/* Conditionally render Learn To Play component */}
+        {selectedSong?.type === 'learn_to_play' && (
+          <div className="mt-12">
+            <LearnToPlay song={selectedSong} setSong={setSelectedSong} />
+          </div>
+        )}
+      </main>
     </div>
+
   );
 };
 
-export default Improv;
+export default LessonPlansPage;
