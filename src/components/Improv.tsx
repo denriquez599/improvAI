@@ -1,10 +1,6 @@
-// Improv.tsx
-import React, { useRef, useState } from 'react';
-import ListeningIndicator from './ListeningIndicator';
-import MidiInput from './MidiInput';
-import MidiPlayer from 'react-midi-player';
+import React, { useState, useEffect, useRef } from 'react';
 import { Song } from './MidiFiles';
-import ImprovRecorder from './AudioRecorder';
+import PerformanceRecorder from './PerformanceRecorder';
 
 interface ImprovProps {
   song: Song;
@@ -12,70 +8,99 @@ interface ImprovProps {
 }
 
 const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
-  const [isListening, setIsListening] = useState(false);
-  const [showCircles, setShowCircles] = useState(false);
-  const [midiFile, setMidiFile] = useState<string | null>(song.midi);
-  const [autoplay, setAutoplay] = useState(false);
-  const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
-  const [userTempoScore, setUserTempoScore] = useState<number>(0);
-  const [userIntonationScore, setUserIntonationScore] = useState<number>(0);
-  const [userMidi, setUserMidi] = useState<string | null>(null);
-  const midiPlayerRef = useRef<HTMLDivElement>(null);
-  const [feedback, setFeedback] = useState<string>('');
+  const [showJudgementOutput, setShowJudgementOutput] = useState(false);
+  const [userTextResults, setUserTextResults] = useState<string>("");
 
-  const fetchAllScores = async () => {
-    try {
-      const midiPath = song.midi;
-      const midiFileName = midiPath.split('/').pop();
+  const [songIsPlaying, setSongIsPlaying] = useState(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
-      const response = await fetch(`www.url.com/endpoint`);
-      if (!response.ok) throw new Error('Failed to fetch scores');
+  const [isRecording, setIsRecording] = useState(false);
 
-      const result = await response.json();
-      if (result.error) throw new Error(result.error);
+  // On startup, create the audioRef
+  useEffect(() => {
+    const audio = new Audio(song.wav);
+    audio.loop = true;
+    audioRef.current = audio;
+  }, []);
 
-      setUserRhythmScore(result.rhythm || 0);
-      setUserTempoScore(result.tempo || 0);
-      setUserIntonationScore(result.intonation || 0);
-      setFeedback(result.feedback || '');
-    } catch (error) {
-      console.error('Error fetching scores:', error);
-      setUserRhythmScore(74);
-      setUserTempoScore(-1);
-      setUserIntonationScore(-1);
-      setFeedback('Good job! Keep practicing!');
+  // What happens when songIsPlaying changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (songIsPlaying) {
+      audio.play().catch((err) => console.error("Playback failed:", err));
+    } else {
+      audio.pause();
+      audio.currentTime = 0;
     }
+  }, [songIsPlaying]);
+
+  // Call to play some metronome clicks based on a certain bpm and then do something
+  const playMetronomeClicksAndStartSong = (
+    tempo: number,
+    beatsPerMeasure: number,
+  ) => {
+    const context = new (window.AudioContext || window.AudioContext)();
+
+    fetch('/metronome.wav')
+      .then((response) => response.arrayBuffer())
+      .then((arrayBuffer) => context.decodeAudioData(arrayBuffer))
+      .then((buffer) => {
+        const intervalSec = 60 / tempo;
+        const startTime = context.currentTime;
+
+        for (let i = 0; i < beatsPerMeasure; i++) {
+          const click = context.createBufferSource();
+          click.buffer = buffer;
+          click.connect(context.destination);
+          click.start(startTime + i * intervalSec);
+        }
+
+        const endTime = startTime + beatsPerMeasure * intervalSec;
+
+        const checkInterval = setInterval(() => {
+          if (context.currentTime >= endTime) {
+            clearInterval(checkInterval);
+            setSongIsPlaying(true);
+          }
+        }, 10);
+      })
   };
 
-  const handleImproviseClick = () => {
-    const iframe = midiPlayerRef.current?.querySelector('iframe');
-    if (iframe) {
-      const win = iframe.contentWindow;
-      if (win) win.postMessage({ type: 'pause' }, '*');
-    }
-    setIsListening(true);
-    setShowCircles(false);
-    setAutoplay(true);
+  // What happens when record is clicked
+  const handleClickRecord = () => {
+    setIsRecording(true)
+    setShowJudgementOutput(false);
+    playMetronomeClicksAndStartSong(song.beatsPerMinute, song.beatsPerMeasure);
   };
 
-  const handleListeningComplete = () => {
-    setIsListening(false);
-    setShowCircles(true);
-    fetchAllScores();
+  // Call to update score variables with response
+  const updateScores = (response: any) => {
+    const prettyFeedback = JSON.stringify(response.feedback, null, 2);
+    setUserTextResults(prettyFeedback)
   };
 
-  const userImage = 'https://via.placeholder.com/50';
-  const userName = 'David';
+  // What happens when judgement completes (score is update and output is shown)
+  const handleJudgementComplete = (response: any) => {
+    updateScores(response);
+    setShowJudgementOutput(true);
+  };
+
+  // What to do when done recording stops (just want to stop music)
+  const handleClickStopRecord = () => {
+    setIsRecording(false)
+    setSongIsPlaying(false)
+  }
+
+
 
   return (
     <div className="items-center w-full h-full justify-center">
       <div className="flex flex-col items-center justify-center bg-gradient-to-b w-full from-spotifyGrey text-white">
         <header className="flex justify-between w-full p-4">
+          <h1 className="text-white items-center text-3xl">ImprovAI - Improvise</h1>
           <button className="text-white"></button>
-          <div className="flex items-center space-x-2">
-            <img src={userImage} alt={userName} className="w-8 h-8 rounded-full" />
-            <span>{userName}</span>
-          </div>
         </header>
 
         <div className="flex flex-row">
@@ -85,68 +110,35 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
               <h2 className="text-lg font-semibold">{song.title}</h2>
               <p className="text-gray-400">{song.artist}</p>
             </div>
+            {!isRecording && (
+              <button
+                onClick={() => setSongIsPlaying(!songIsPlaying)}
+                className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md"
+              >
+                {songIsPlaying ? "Stop" : "Preview"}
+              </button>
+            )}
+
             <div className="flex items-center justify-center">
-              {midiFile && isListening && (
-                <div className="hidden" ref={midiPlayerRef}>
-                  <MidiPlayer
-                    key={isListening ? 'playing' : 'stopped'}
-                    src={song.midi}
-                    autoplay={autoplay}
-                    onPlay={() => setAutoplay(false)}
-                  />
-                </div>
-              )}
-              <ImprovRecorder
-                handleListeningComplete={handleListeningComplete}
-                handleImproviseClick={handleImproviseClick}
+              <PerformanceRecorder
+                handleJudgementComplete={handleJudgementComplete}
+                handleClickRecord={handleClickRecord}
+                handleClickStopRecord={handleClickStopRecord}
+                feedbackEndpoint='http://127.0.0.1:8000/judge/improv'
+                songid={song.id}
               />
             </div>
+
           </div>
-
-          {showCircles && (
+          {showJudgementOutput && (
             <div className="flex flex-col justify-center capitalize items-center ml-8">
-              <div className="flex space-x-4 mb-2">
-                {Object.entries({
-                  Intonation: userIntonationScore,
-                  rhythm: userRhythmScore,
-                  tonality: userTempoScore
-                }).map(([key, value]) => {
-                  const radius = 72;
-                  const strokeWidth = 8;
-                  const circumference = 2 * Math.PI * radius;
-                  const offset = circumference * (1 - value / 100);
-
-                  return (
-                    <div key={key} className="relative w-36 h-36">
-                      <svg width="100%" height="100%" viewBox="0 0 160 160">
-                        <circle
-                          cx="80"
-                          cy="80"
-                          r={radius}
-                          stroke="#212121"
-                          strokeWidth={strokeWidth}
-                          fill="none"
-                        />
-                        <circle
-                          cx="80"
-                          cy="80"
-                          r={radius}
-                          stroke="#3b82f6"
-                          strokeWidth={strokeWidth}
-                          fill="none"
-                          strokeDasharray={circumference}
-                          strokeDashoffset={offset}
-                          strokeLinecap="round"
-                          transform="rotate(-90 80 80)"
-                        />
-                      </svg>
-                      <div className="absolute inset-0 flex flex-col items-center justify-center">
-                        <span className="text-lg text-spotifyLightGrey">{key}</span>
-                        <span className="font-bold text-2xl">{value}</span>
-                      </div>
-                    </div>
-                  );
-                })}
+              <div className="mt-4 p-4 bg-spotifyGrey rounded-lg shadow-md text-center text-white max-w-md w-full">
+                <span className="text-lg font-bold text-spotifyLightGrey block mb-2">
+                  Here's what we think about your improvised piece:
+                </span>
+                <div className="whitespace-pre-wrap break-words">
+                  <p>{userTextResults || "No additional information available."}</p>
+                </div>
               </div>
               {feedback && (
                 <div className="bg-spotifyGrey text-white p-4 mt-4 rounded-lg w-full h-full text-center">
