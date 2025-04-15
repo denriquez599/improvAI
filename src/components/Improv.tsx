@@ -9,10 +9,6 @@ interface ImprovProps {
 
 const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
   const [showJudgementOutput, setShowJudgementOutput] = useState(false);
-  const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
-  const [userIntonationScore, setUserIntonationScore] = useState<number>(0);
-  const [userOverallScore, setUserOverallScore] = useState<number>(0);
-  const [userTempoScore, setUserTempoScore] = useState<number>(0);
   const [userTextResults, setUserTextResults] = useState<string>("");
 
   const [songIsPlaying, setSongIsPlaying] = useState(false);
@@ -77,17 +73,13 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
 
   // Call to update score variables with response
   const updateScores = (response: any) => {
-    setUserRhythmScore(parseFloat(response.rhythm.toFixed(2)))
-    setUserIntonationScore(parseFloat(response.intonation.toFixed(2)));
-    setUserOverallScore(parseFloat(response.overall_score.toFixed(2)));
-    setUserTempoScore(parseFloat(response.tempo.toFixed(2)));
     const prettyFeedback = JSON.stringify(response.feedback, null, 2);
     setUserTextResults(prettyFeedback)
   };
 
   // What happens when judgement completes (score is update and output is shown)
   const handleJudgementComplete = (response: any) => {
-    updateScores(response)
+    updateScores(response);
     setShowJudgementOutput(true);
   };
 
@@ -96,9 +88,6 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
     setSongIsPlaying(false)
   }
 
-
-  const userImage = 'davidImage.jpeg';
-  const userName = 'David';
 
 
   return (
@@ -122,26 +111,16 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
                 handleClickRecord={handleClickRecord}
                 handleClickStopRecord={handleClickStopRecord}
                 feedbackEndpoint='http://127.0.0.1:8000/judge/improv'
+                songid={song.id}
               />
             </div>
 
           </div>
           {showJudgementOutput && (
             <div className="flex flex-col justify-center capitalize items-center ml-8">
-              <div className="flex space-x-4 mb-2">
-                {Object.entries({ 'overall_score': userOverallScore, 'rhythm': userRhythmScore, 'intonation': userIntonationScore, 'tempo': userTempoScore }).map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex items-center flex-col justify-center w-36 h-36 border-2 rounded-full bg-transparent border-spotifyLightGrey"
-                  >
-                    <span className="text-lg text-spotifyLightGrey">{key}</span>
-                    <span className="font-bold text-2xl">{value}</span>
-                  </div>
-                ))}
-              </div>
               <div className="mt-4 p-4 bg-spotifyGrey rounded-lg shadow-md text-center text-white max-w-md w-full">
                 <span className="text-lg font-bold text-spotifyLightGrey block mb-2">
-                  Here's what we think:
+                  Here's what we think about your improvised piece:
                 </span>
                 <div className="whitespace-pre-wrap break-words">
                   <p>{userTextResults || "No additional information available."}</p>

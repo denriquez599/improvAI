@@ -9,7 +9,7 @@ interface LearnToPlayProps {
 
 const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
     const [showJudgementOutput, setShowJudgementOutput] = useState(false);
-    const [userRhythmScore, setUserRhythmScore] = useState<number>(0);
+    const [userPitchScore, setUserPitchScore] = useState<number>(0);
     const [userIntonationScore, setUserIntonationScore] = useState<number>(0);
     const [userOverallScore, setUserOverallScore] = useState<number>(0);
     const [userTempoScore, setUserTempoScore] = useState<number>(0);
@@ -77,7 +77,7 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
 
     // Call to update score variables with response
     const updateScores = (response: any) => {
-        setUserRhythmScore(parseFloat(response.rhythm.toFixed(2)))
+        setUserPitchScore(parseFloat(response.pitch.toFixed(2)))
         setUserIntonationScore(parseFloat(response.intonation.toFixed(2)));
         setUserOverallScore(parseFloat(response.overall_score.toFixed(2)));
         setUserTempoScore(parseFloat(response.tempo.toFixed(2)));
@@ -122,6 +122,7 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
                                 handleClickRecord={handleClickRecord}
                                 handleClickStopRecord={handleClickStopRecord}
                                 feedbackEndpoint='http://127.0.0.1:8000/judge/song'
+                                songid={song.id}
                             />
                         </div>
 
@@ -129,7 +130,7 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
                     {showJudgementOutput && (
                         <div className="flex flex-col justify-center capitalize items-center ml-8">
                             <div className="flex space-x-4 mb-2">
-                                {Object.entries({ 'overall_score': userOverallScore, 'rhythm': userRhythmScore, 'intonation': userIntonationScore, 'tempo': userTempoScore }).map(([key, value]) => (
+                                {Object.entries({ 'overall_score': userOverallScore, 'pitch': userPitchScore, 'intonation': userIntonationScore, 'tempo': userTempoScore }).map(([key, value]) => (
                                     <div
                                         key={key}
                                         className="flex items-center flex-col justify-center w-36 h-36 border-2 rounded-full bg-transparent border-spotifyLightGrey"

@@ -8,9 +8,10 @@ interface PerformanceRecorderProps {
   handleJudgementComplete: (response: any) => void;
   handleClickStopRecord: () => void;
   feedbackEndpoint: string;
+  songid: string;
 }
 
-const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRecord: handleClickRecord, handleJudgementComplete: handleJudgementComplete, handleClickStopRecord: handleRecordingComplete, feedbackEndpoint }) => {
+const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRecord: handleClickRecord, handleJudgementComplete: handleJudgementComplete, handleClickStopRecord: handleRecordingComplete, feedbackEndpoint, songid }) => {
   const [useMidiInput, setUseMidiInput] = useState(false);
 
   const [recordingUsingMicrophone, setRecordingUsingMicrophone] = useState(false);
@@ -32,6 +33,7 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
     setBusyCalculatingMetrics(true);
     const formData = new FormData();
     formData.append('file', audioBlob, filename);
+    formData.append('song_id', songid)
     try {
       const response = await fetch(feedbackEndpoint, {
         method: 'POST',

@@ -7,6 +7,7 @@ const HomePage: React.FC<{ setPage: (page: string) => void, setFolder: (folder: 
 
   const improvLibrarySongs = [songArray[1], songArray[3], songArray[5]];
 
+  // Hardcoded lesson plan stuff
   const lessonPlanDescriptions: string[] = [
     `### Demo Lesson Plan
 
@@ -23,7 +24,6 @@ This lesson plan is designed for the final capstone exposition:
 2. Try to improvise over some songs
 3. Highlight your creativity and musicality`,
   ];
-
 
   const lessonPlanFolderNames: string[] = [
     "Demo Day Lesson Plan",
