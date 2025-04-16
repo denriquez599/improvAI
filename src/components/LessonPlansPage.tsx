@@ -33,7 +33,7 @@ const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ lessonPlan }) => {
         {/* Song Thumbnails in Lesson Folder */}
         <section className="mt-8 ">
           <h2 className="text-xl text-white font-bold mb-4">Songs in This Lesson Plan</h2>
-          <div className="flex gap-8 w-full max-w-6xl justify-center items-center overflow-x-auto overflow-y-hidden no-scrollbar">
+          <div className="flex gap-8 w-full max-w-6xl  overflow-x-auto overflow-y-hidden no-scrollbar">
             {lessonPlan.songs.map((song, idx) => (
               <button
                 key={idx}

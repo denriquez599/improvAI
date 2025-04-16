@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import studentsArray, { Student } from "@/components/Students";
+import { useRouter } from 'next/router';
 
 type Song = {
   title: string;
@@ -16,13 +17,17 @@ type Song = {
 type Props = {
   songArray: Song[];
   makingPlan: boolean;
+  setPage: (page: string) => void;
+  page: string;
 };
 
-function SongLibrary({ songArray, makingPlan = false }: Props) {
+function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
   const [selectedSongs, setSelectedSongs] = useState<Set<string>>(new Set());
   const [showPopup, setShowPopup] = useState(false);
   const [lessonName, setLessonName] = useState('');
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+  const router = useRouter();
+
 
   const toggleSong = (id: string) => {
     setSelectedSongs((prev) => {
@@ -41,6 +46,11 @@ function SongLibrary({ songArray, makingPlan = false }: Props) {
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
     );
   };
+  
+  function handleSaveClick() { 
+    setShowPopup(false);
+    setPage("Portal");
+  }
 
   const selectedSongArray = songArray.filter(song => selectedSongs.has(song.id));
 
@@ -137,7 +147,7 @@ function SongLibrary({ songArray, makingPlan = false }: Props) {
                   </label>
                 ))}
               </div>
-              <button className='mt-2 w-full h-10 bg-spotifyGreen hover:scale-105 text-white font-semibold rounded border-2 border-white hover:opacity-90'>
+              <button onClick={handleSaveClick} className='mt-2 w-full h-10 bg-spotifyGreen hover:scale-105 text-white font-semibold rounded border-2 border-white hover:opacity-90'>
                 Save
               </button>
             </div>

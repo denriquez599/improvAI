@@ -32,11 +32,12 @@ const SideScrollLibrary: React.FC<SideScrollLibraryProps> = ({
   };
 
   return (
-    <>
-      <section className="mt-4">
-        <h2 className="text-xl text-white font-bold indent-8 mb-4">Your Lesson Plans</h2>
-        <div className="flex gap-8 w-full max-w-6xl overflow-x-auto ml-4 overflow-y-hidden no-scrollbar">
-          {lessonPlans.map((lessonPlan, lessonPlanIndex) => (
+    <section className="mt-4">
+      <h2 className="text-xl text-white font-bold indent-8 mb-4">Your Lesson Plans</h2>
+      <div className="flex gap-8 w-full max-w-6xl overflow-x-auto ml-4 overflow-y-hidden no-scrollbar">
+        {lessonPlans
+          .filter((lp) => !lp.hidden)
+          .map((lessonPlan, lessonPlanIndex) => (
             <div key={lessonPlanIndex} className="flex-shrink-0">
               {expandedLessonPlanIndex === lessonPlanIndex ? (
                 <div
@@ -85,20 +86,19 @@ const SideScrollLibrary: React.FC<SideScrollLibraryProps> = ({
                 {expandedLessonPlanIndex === lessonPlanIndex ? null : lessonPlan.title || "Lesson Folder"}
               </h3>
             </div>
-          ))}
+        ))}
 
-          <button
-            className="bg-spotifyGrey hover:scale-105 rounded-md p-4 flex items-center justify-center w-48 h-48"
-            onClick={() => {
-              setPage("Library");
-              setMakingPlan(true);
-            }}
-          >
-            <h3 className="text-white font-semibold text-center">New Lesson Plan</h3>
-          </button>
-        </div>
-      </section>
-    </>
+        <button
+          className="bg-spotifyGrey hover:scale-105 rounded-md p-4 flex items-center justify-center w-48 h-48"
+          onClick={() => {
+            setPage("Library");
+            setMakingPlan(true);
+          }}
+        >
+          <h3 className="text-white font-semibold text-center">New Lesson Plan</h3>
+        </button>
+      </div>
+    </section>
   );
 };
 

@@ -29,7 +29,7 @@ export default function Home() {
       {/* {page == "Home Page" && <HomePage />} */}
       <Sidebar setPage={setPage} setSong={setSong} setLessonPlan={setLessonPlan} />
         {page=="Portal" && <PortalHome students={students} setPage={setPage} makingPlan={makingPlan} setMakingPlan={setMakingPlan} lessonPlans={lessonPlans} setLessonPlan={setLessonPlan} />}    
-        {page=="Library" && <SongLibrary makingPlan={makingPlan} songArray={songArray}  />}
+        {page=="Library" && <SongLibrary setPage={setPage} page={page} makingPlan={makingPlan} songArray={songArray}  />}
     </div>
   );
 }
