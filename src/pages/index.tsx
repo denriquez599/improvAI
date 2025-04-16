@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div className='flex h-screen overflow-y-scroll w-full overflow-x-auto bg-gradient-to-b from-spotifyGrey to-blackground'>
       {/* {page == "Home Page" && <HomePage />} */}
-      <Sidebar setPage={setPage} setSong={setSong} setLessonPlan={setLessonPlan} />
+      <Sidebar page={page} setPage={setPage} setSong={setSong} setLessonPlan={setLessonPlan} />
       {page == "Home Page" && <HomePage setSong={setSong} setPage={setPage} setLessonPlan={setLessonPlan} />}
       {page == "Improvise" && <Improv setSong={setSong} song={song} />}
       {page == "Learn To Play" && <LearnToPlay setSong={setSong} song={song} />}

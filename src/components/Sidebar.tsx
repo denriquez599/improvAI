@@ -6,9 +6,10 @@ interface SidebarProps {
   setPage: (page: string) => void;
   setSong: (song: Song) => void;
   setLessonPlan: (lessonPlan: LessonPlan) => void;
+  page: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) => {
+const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan, page }) => {
   return (
 <aside className="w-1/4 flex-none bg-black p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">      <div>
         <button
@@ -19,7 +20,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
         </button>
 
         {/* Learn-To-Play Library */}
-        <div className="group">
+       {page !== "Portal" && page !== "Library" ? <div className="group">
           <p className="text-white text-left w-full py-2 px-4 bg-spotifyGrey hover:bg-gray-700">
             Your Learn-To-Play Library
           </p>
@@ -39,12 +40,12 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
                 </li>
               ))}
           </ul>
-        </div>
+        </div>: null}
 
         {/* Improv Library */}
         <div className="group">
           <p className="text-white text-left w-full py-2 px-4 bg-spotifyGrey hover:bg-gray-700">
-            Your Improvisation Library
+            {page==="Portal"||"Library"? "Library" :"Your Improvisation Library"}
           </p>
           <ul className="text-spotifyLightGrey max-h-0 overflow-hidden group-hover:max-h-96 group-hover:mt-2 transition-all duration-300 ease-in-out space-y-1 mt-0">
             {songArray
@@ -67,8 +68,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
         {/* Lesson Plans */}
         <div className="group">
           <p className="text-white text-left w-full py-2 rounded-b-md px-4 bg-spotifyGrey hover:bg-gray-700">
-            Your Lesson Plans
-          </p>
+{page==="Portal"||"Library"?"Lesson Plans" :"            Your Lesson Plans"
+}          </p>
           <ul className="text-spotifyLightGrey max-h-0 overflow-hidden group-hover:max-h-96 group-hover:mt-2 transition-all duration-300 ease-in-out space-y-1 mt-0">
             {lessonPlans.map((plan, index) => (
               <li

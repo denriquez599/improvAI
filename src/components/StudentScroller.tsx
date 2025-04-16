@@ -3,7 +3,7 @@ import { Student } from './Students';
 
 interface StudentScrollerProps {
   students: Student[];
-  onStudentClick?: (student: Student) => void;
+  onStudentClick: (student: Student) => void;
 }
 
 const StudentScroller: React.FC<StudentScrollerProps> = ({ students, onStudentClick }) => {
@@ -15,7 +15,7 @@ const StudentScroller: React.FC<StudentScrollerProps> = ({ students, onStudentCl
           {students.map((student, index) => (
             <button
               key={index}
-              onClick={() => onStudentClick?.(student)}
+              onClick={() => onStudentClick(student)}
               className="flex-shrink-0 hover:opacity-90 bg-spotifyGrey rounded-md p-4 items-center w-48 h-fit text-white text-center"
             >
               <div className="w-24 h-24 mx-auto rounded-full overflow-hidden">

@@ -15,6 +15,8 @@ import lessonPlans, { LessonPlan } from "@/components/LessonPlans";
 import PortalHome from "@/components/PortalHome";
 import studentsArray, { Student } from "@/components/Students";
 import SongLibrary from "@/components/SongLibrary";
+import StudentProgress from "@/components/StudentProgress";
+import studentArray from "@/components/Students";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
@@ -23,12 +25,13 @@ export default function Home() {
   const [lessonPlan, setLessonPlan] = useState<LessonPlan>(lessonPlans[0]);
   const [students, setStudents] = useState<Student[]>(studentsArray);
   const [makingPlan, setMakingPlan] = useState<boolean>(false);
+  const [pickedStudent, setPickedStudent] = useState<Student | null>(null);
   
   return (
     <div className='flex h-screen bg-gradient-to-b from-spotifyGrey to-blackground'>
       {/* {page == "Home Page" && <HomePage />} */}
-      <Sidebar setPage={setPage} setSong={setSong} setLessonPlan={setLessonPlan} />
-        {page=="Portal" && <PortalHome students={students} setPage={setPage} makingPlan={makingPlan} setMakingPlan={setMakingPlan} lessonPlans={lessonPlans} setLessonPlan={setLessonPlan} />}    
+      <Sidebar page={page} setPage={setPage} setSong={setSong} setLessonPlan={setLessonPlan} />
+        {page=="Portal" && <PortalHome pickedStudent={pickedStudent} setPickedStudent={setPickedStudent} students={students} setPage={setPage} makingPlan={makingPlan} setMakingPlan={setMakingPlan} lessonPlans={lessonPlans} setLessonPlan={setLessonPlan} />}    
         {page=="Library" && <SongLibrary setPage={setPage} page={page} makingPlan={makingPlan} songArray={songArray}  />}
     </div>
   );
