@@ -12,22 +12,24 @@ import LearnToPlay from "@/components/LearnToPlay";
 import LessonPlansPage from "@/components/LessonPlansPage";
 import songArray, { Song } from "@/components/MidiFiles";
 import lessonPlans, { LessonPlan } from "@/components/LessonPlans";
-
+import PortalHome from "@/components/PortalHome";
+import studentsArray, { Student } from "@/components/Students";
+import SongLibrary from "@/components/SongLibrary";
 const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
-  const [page, setPage] = useState<string>("Home Page");
+  const [page, setPage] = useState<string>("Portal");
   const [song, setSong] = useState<Song>(songArray[0]);
   const [lessonPlan, setLessonPlan] = useState<LessonPlan>(lessonPlans[0]);
+  const [students, setStudents] = useState<Student[]>(studentsArray);
+  const [makingPlan, setMakingPlan] = useState<boolean>(false);
+  
   return (
-    <div className='flex h-screen overflow-y-scroll w-full overflow-x-auto bg-gradient-to-b from-spotifyGrey to-blackground'>
+    <div className='flex h-screen bg-gradient-to-b from-spotifyGrey to-blackground'>
       {/* {page == "Home Page" && <HomePage />} */}
       <Sidebar setPage={setPage} setSong={setSong} setLessonPlan={setLessonPlan} />
-      {page == "Home Page" && <HomePage setSong={setSong} setPage={setPage} setLessonPlan={setLessonPlan} />}
-      {page == "Improvise" && <Improv setSong={setSong} song={song} />}
-      {page == "Learn To Play" && <LearnToPlay setSong={setSong} song={song} />}
-      {page == "Lesson Plan" && <LessonPlansPage lessonPlan={lessonPlan} />}
-      {/* <Footer /> */}
+        {page=="Portal" && <PortalHome students={students} setPage={setPage} makingPlan={makingPlan} setMakingPlan={setMakingPlan} lessonPlans={lessonPlans} setLessonPlan={setLessonPlan} />}    
+        {page=="Library" && <SongLibrary setPage={setPage} page={page} makingPlan={makingPlan} songArray={songArray}  />}
     </div>
   );
 }

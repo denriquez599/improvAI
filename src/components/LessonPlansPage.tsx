@@ -31,9 +31,9 @@ const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ lessonPlan }) => {
         </header>
 
         {/* Song Thumbnails in Lesson Folder */}
-        <section className="mt-8">
+        <section className="mt-8 ">
           <h2 className="text-xl text-white font-bold mb-4">Songs in This Lesson Plan</h2>
-          <div className="flex gap-8 w-full max-w-6xl overflow-x-auto overflow-y-hidden no-scrollbar">
+          <div className="flex gap-8 w-full max-w-6xl  overflow-x-auto overflow-y-hidden no-scrollbar">
             {lessonPlan.songs.map((song, idx) => (
               <button
                 key={idx}
@@ -55,7 +55,7 @@ const LessonPlansPage: React.FC<LessonPlansPageProps> = ({ lessonPlan }) => {
           </div>
         </section>
 
-        <section className="mt-6 w-full max-w-6xl flex flex-col">
+        <section className="mt-6 w-full max-w-6xl flex justify-center items-center flex-col">
           <h3 className="text-lg font-semibold text-white mb-2">
             What your teacher wants you to know about this lesson plan:
           </h3>

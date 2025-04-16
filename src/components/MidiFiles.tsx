@@ -1,3 +1,5 @@
+import { LessonPlan } from "./LessonPlans";
+
 export interface Song {
   title: string;
   cover: string;
@@ -9,6 +11,8 @@ export interface Song {
   type: string;
   id: string;
 }
+
+
 
 const songArray: Song[] = [
   { title: 'Tutu', cover: 'songPictures/tutu.jpg', midi: 'midiFiles/Tutu.mid', artist: 'Miles Davis', wav: 'wavFiles/tutu.wav', beatsPerMeasure: 4, beatsPerMinute: 70, type: 'improv', id: "Tutu.mid" },
