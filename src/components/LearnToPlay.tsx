@@ -123,7 +123,7 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
                         {!isRecording && (
                             <button
                                 onClick={() => setSongIsPlaying(!songIsPlaying)}
-                                className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md"
+                                className="mt-4 px-4 py-2 border border-white hover:bg-gray-400 text-white rounded-md"
                             >
                                 {songIsPlaying ? "Stop" : "Preview"}
                             </button>

@@ -1,9 +1,9 @@
 import songArray, { Song } from "./MidiFiles";
 
-export interface LessonPlan {
-    title: string;
-    songs: Song[];
-    description: string;
+export class LessonPlan {
+    title!: string;
+    songs!: Song[];
+    description!: string;
 }
 
 const lessonPlans: LessonPlan[] = [
@@ -32,7 +32,8 @@ This lesson plan is designed for the final capstone exposition:
         title: "Twinkle Lesson Plan",
         songs: [songArray[6]],
         description: "Just Twinkle Twinkle little star. For fun!"
-    }
+    },
+
 ];
 
 export default lessonPlans;

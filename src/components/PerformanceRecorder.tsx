@@ -132,25 +132,9 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
   return (
     <div className="flex flex-col items-center justify-center p-6 rounded-lg shadow-lg bg-spotifyGrey text-white w-full max-w-lg">
 
-      {/* Toggle Switch for Input Type */}
-      <div className="flex items-center">
-        <span className="mr-2 text-white">
-          Use MIDI Connection?
-        </span>
-        <label className="switch">
-          <input
-            type="checkbox"
-            checked={useMidiInput}
-            onChange={toggleInputType}
-          />
-          <span className="slider"></span>
-        </label>
-      </div>
-
-      <div className="h-8" /> {/* 2rem of space */}
 
       {busyCalculatingMetrics && (
-        <div className="w-80 px-6 py-3 mb-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded animate-pulse text-center">
+        <div className="w-80 px-6 mb-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded animate-pulse text-center">
           Getting feedback for your performance...
         </div>
       )}
@@ -176,6 +160,21 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
           Start Recording Using Microphone
         </button>
       )}
+
+      {/* Toggle Switch for Input Type */}
+      <div className="flex items-center">
+        <span className="mr-2 text-white">
+          Use MIDI Connection?
+        </span>
+        <label className="switch h-8 w-16">
+          <input
+            type="checkbox"
+            checked={useMidiInput}
+            onChange={toggleInputType}
+          />
+          <span className="slider"></span>
+        </label>
+      </div>
 
       {isListeningIndicatorOn && (
         <ListeningIndicator

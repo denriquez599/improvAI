@@ -10,18 +10,17 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) => {
   return (
-    <aside className="w-1/4 bg-black p-4 space-y-4">
-      <div>
+<aside className="w-1/4 flex-none bg-black p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">      <div>
         <button
           onClick={() => setPage("Home Page")}
-          className="text-white text-left w-full py-2 px-4 rounded-md mb-6 bg-spotifyGrey hover:bg-gray-700"
+          className="text-white text-left w-full py-2 px-4 rounded-t-md bg-spotifyGrey hover:bg-gray-700"
         >
           Home
         </button>
 
         {/* Learn-To-Play Library */}
         <div className="group">
-          <p className="text-white text-left w-full py-2 px-4 rounded-md bg-spotifyGrey hover:bg-gray-700">
+          <p className="text-white text-left w-full py-2 px-4 bg-spotifyGrey hover:bg-gray-700">
             Your Learn-To-Play Library
           </p>
           <ul className="text-spotifyLightGrey max-h-0 overflow-hidden group-hover:max-h-96 group-hover:mt-2 transition-all duration-300 ease-in-out space-y-1 mt-0">
@@ -34,7 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
                     setPage("Learn To Play");
                     setSong(song);
                   }}
-                  className="hover:cursor-pointer hover:text-white px-4"
+                  className="hover:cursor-pointer mt-2 mb-2 hover:text-white px-4"
                 >
                   {song.title}
                 </li>
@@ -43,8 +42,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
         </div>
 
         {/* Improv Library */}
-        <div className="group mt-4">
-          <p className="text-white text-left w-full py-2 px-4 rounded-md bg-spotifyGrey hover:bg-gray-700">
+        <div className="group">
+          <p className="text-white text-left w-full py-2 px-4 bg-spotifyGrey hover:bg-gray-700">
             Your Improvisation Library
           </p>
           <ul className="text-spotifyLightGrey max-h-0 overflow-hidden group-hover:max-h-96 group-hover:mt-2 transition-all duration-300 ease-in-out space-y-1 mt-0">
@@ -57,7 +56,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
                     setPage("Improvise");
                     setSong(song);
                   }}
-                  className="hover:cursor-pointer hover:text-white px-4"
+                  className="hover:cursor-pointer mb-2 mt-2  hover:text-white px-4"
                 >
                   {song.title}
                 </li>
@@ -66,8 +65,8 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
         </div>
 
         {/* Lesson Plans */}
-        <div className="group mt-4">
-          <p className="text-white text-left w-full py-2 px-4 rounded-md bg-spotifyGrey hover:bg-gray-700">
+        <div className="group">
+          <p className="text-white text-left w-full py-2 rounded-b-md px-4 bg-spotifyGrey hover:bg-gray-700">
             Your Lesson Plans
           </p>
           <ul className="text-spotifyLightGrey max-h-0 overflow-hidden group-hover:max-h-96 group-hover:mt-2 transition-all duration-300 ease-in-out space-y-1 mt-0">
@@ -80,7 +79,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) =>
                 }}
                 className="hover:cursor-pointer hover:text-white px-4"
               >
-                📁 {plan.title}
+                {plan.title}
               </li>
             ))}
           </ul>

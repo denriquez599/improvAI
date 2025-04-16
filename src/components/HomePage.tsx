@@ -6,7 +6,6 @@ const HomePage: React.FC<{ setPage: (page: string) => void, setLessonPlan: (less
 
   const [expandedLessonPlanIndex, setExpandedLessonPlanIndex] = useState<number | null>(null);
 
-
   const handleLessonPlanClick = (lessonPlanIndex: number, lessonPlan: LessonPlan) => {
     if (expandedLessonPlanIndex === lessonPlanIndex) {
       setLessonPlan(lessonPlan);
@@ -16,12 +15,9 @@ const HomePage: React.FC<{ setPage: (page: string) => void, setLessonPlan: (less
     }
   };
 
-
   return (
-    <div className="items-center w-full h-full justify-center">
-      {/* Main Content */}
-      <main className="flex-1 p-6 overflow-auto">
-        {/* Header with User Info */}
+    <div className="items-center h-full w-full max-w-full overflow-x-hidden">
+      <main className="flex-1 p-6 overflow-y-auto overflow-x-hidden">
         <header className="flex justify-between">
           <h1 className="text-white items-center text-3xl">ImprovAI - Home</h1>
           <div className="text-right">
@@ -70,43 +66,58 @@ const HomePage: React.FC<{ setPage: (page: string) => void, setLessonPlan: (less
           <h2 className="text-xl text-white font-bold mb-4">Lesson Plans From Your Teacher</h2>
           <div className="flex gap-8 w-full max-w-6xl overflow-x-auto overflow-y-hidden no-scrollbar">
             {lessonPlans.map((lessonPlan, lessonPlanIndex) => (
-              <div key={lessonPlanIndex} className="flex-shrink-0">
-                <button
-                  className="relative group w-48 h-48"
-                  onClick={() => handleLessonPlanClick(lessonPlanIndex, lessonPlan)}
-                >
-                  {/* Stacked Placeholder Tiles */}
-                  {lessonPlan.songs.map((song, index) => (
-                    <div
-                      key={index}
-                      className="absolute w-full h-full bg-spotifyGrey overflow-hidden rounded-md transition-all duration-300"
-                      style={{
-                        top: `${index}px`,
-                        left: `${index * 8}px`,
-                        zIndex: lessonPlan.songs.length - index,
-                      }}
-                    >
-                      <img
-                        src={song.cover}
-                        alt={`${song.title} cover`}
-                        className="w-full h-full object-contain rounded-md opacity-70 group-hover:opacity-90"
-                      />
-                    </div>
-                  ))}
-                </button>
-                <h3 className="text-white font-semibold text-center text-ellipsis overflow-hidden whitespace-nowrap w-full mt-2">
-                  {lessonPlan.title || "Lesson Folder"}
-                </h3>
-                {expandedLessonPlanIndex === lessonPlanIndex && (
-                  <div className="mt-4 text-white text-sm">
+              <div key={lessonPlanIndex} className="relative flex-shrink-0">
+                {expandedLessonPlanIndex === lessonPlanIndex ? (
+                  <div
+                    className="absolute left-0 top-0 z-10 flex gap-0 cursor-pointer"
+                    onClick={() => handleLessonPlanClick(lessonPlanIndex, lessonPlan)}
+                    style={{ width: `${lessonPlan.songs.length * 12}rem` }}
+                  >
                     {lessonPlan.songs.map((song, index) => (
-                      <div key={index} className="flex justify-between">
-                        <span>{song.title}</span>
-                        <span className="text-gray-300">{song.type === 'improv' ? '🎵 Improv' : '📘 Learn-To-Play'}</span>
+                      <div
+                        key={index}
+                        className="bg-spotifyGrey pb-2 items-center space-y-2 h-fit w-48"
+                      >
+                        <div className="w-48 h-48 overflow-hidden">
+                          <img
+                            src={song.cover}
+                            alt={`${song.title} cover`}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                        <h3 className="text-white font-semibold text-center text-ellipsis overflow-hidden whitespace-nowrap w-full">
+                          {song.title}
+                        </h3>
                       </div>
                     ))}
                   </div>
+                ) : (
+                  <button
+                    className="relative group w-48 h-48"
+                    onClick={() => setExpandedLessonPlanIndex(lessonPlanIndex)}
+                  >
+                    {lessonPlan.songs.map((song, index) => (
+                      <div
+                        key={index}
+                        className="absolute w-full h-full bg-spotifyGrey overflow-hidden rounded-md transition-all duration-300"
+                        style={{
+                          top: `${index}px`,
+                          left: `${index * 8}px`,
+                          zIndex: lessonPlan.songs.length - index,
+                        }}
+                      >
+                        <img
+                          src={song.cover}
+                          alt={`${song.title} cover`}
+                          className="w-full h-full object-contain rounded-md opacity-70 group-hover:opacity-90"
+                        />
+                      </div>
+                    ))}
+                  </button>
                 )}
+                <h3 className="text-white font-semibold text-center text-ellipsis overflow-hidden whitespace-nowrap w-full mt-2">
+                  {expandedLessonPlanIndex === lessonPlanIndex ? null : lessonPlan.title || "Lesson Folder"}
+                </h3>
               </div>
             ))}
           </div>

@@ -113,9 +113,9 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
             {!isRecording && (
               <button
                 onClick={() => setSongIsPlaying(!songIsPlaying)}
-                className="mt-4 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-md"
+                className="mt-4 px-4 py-2 bg-transparent border border-white text-white rounded-md"
               >
-                {songIsPlaying ? "Stop" : "Preview"}
+                {songIsPlaying ? "Stop Song" : "Preview"}
               </button>
             )}
 
@@ -140,11 +140,6 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
                   <p>{userTextResults || "No additional information available."}</p>
                 </div>
               </div>
-              {feedback && (
-                <div className="bg-spotifyGrey text-white p-4 mt-4 rounded-lg w-full h-full text-center">
-                  <p className="text-lg font-medium">{feedback}</p>
-                </div>
-              )}
             </div>
           )}
         </div>
