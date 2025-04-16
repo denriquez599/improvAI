@@ -17,7 +17,7 @@ const songArray: Song[] = [
   { title: 'All Of Me', cover: 'songPictures/allOfMe.jpeg', midi: 'midiFiles/AllOfMe.mid', artist: 'Matsayoshi Takanaka', wav: 'wavFiles/allOfMe.wav', beatsPerMeasure: 4, beatsPerMinute: 130, type: 'improv', id: "AllOfMe.mid" },
   { title: 'There Will Never Be Another You', cover: 'songPictures/thereWillNeverBeAnotherYou.jpg', midi: 'midiFiles/ThereWillNeverBeAnotherYou.mid', artist: 'Chet Baker', wav: 'wavFiles/twinkletwinklelittlestar.wav', beatsPerMeasure: 4, beatsPerMinute: 120, type: 'improv', id: "ThereWillNeverBeAnotherYou.mid" },
   { title: '55 Dive', cover: 'songPictures/55Dive.jpeg', midi: 'midiFiles/55Dive.mid', artist: 'Mike Stern', wav: 'wavFiles/twinkletwinklelittlestar.wav', beatsPerMeasure: 4, beatsPerMinute: 120, type: 'improv', id: "55Dive.mid" },
-  { title: 'Twinkle', cover: 'songPictures/twinkle.jpeg', midi: 'midiFiles/twinkle2correct.mid', artist: 'Dizzy Gillespie', wav: 'wavFiles/twinkletwinklelittlestar.wav', beatsPerMeasure: 4, beatsPerMinute: 100, type: 'learn_to_play', id: "twinkle2correct.mid" },
+  { title: 'Twinkle', cover: 'songPictures/twinkle.jpeg', midi: 'dog', artist: 'Dizzy Gillespie', wav: 'wavFiles/twinkletwinklelittlestar.wav', beatsPerMeasure: 4, beatsPerMinute: 100, type: 'learn_to_play', id: "twinkletopaustin.mid" },
 ];
 
 export default songArray;

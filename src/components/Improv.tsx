@@ -140,11 +140,6 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
                   <p>{userTextResults || "No additional information available."}</p>
                 </div>
               </div>
-              {feedback && (
-                <div className="bg-spotifyGrey text-white p-4 mt-4 rounded-lg w-full h-full text-center">
-                  <p className="text-lg font-medium">{feedback}</p>
-                </div>
-              )}
             </div>
           )}
         </div>
