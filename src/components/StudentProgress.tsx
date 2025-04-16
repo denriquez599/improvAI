@@ -33,7 +33,7 @@ const StudentProgress: React.FC<StudentProgressProps> = ({ student, onClose }) =
         </div>
 
         <div className="text-white mb-4">
-          <h3 className="text-lg font-semibold">Overall Score:</h3>
+          <h3 className="text-lg font-semibold">Assigned Lesson Plan Completion:</h3>
           <p className="text-spotifyGreen text-xl font-bold">
             {student.progress}%
           </p>
