@@ -16,6 +16,12 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
 
   const [isRecording, setIsRecording] = useState(false);
 
+  useEffect(() => {
+    const audio = new Audio(song.wav);
+    audio.loop = true;
+    audioRef.current = audio;
+  }, [song]);
+
   // On startup, create the audioRef
   useEffect(() => {
     const audio = new Audio(song.wav);
@@ -131,9 +137,9 @@ const Improv: React.FC<ImprovProps> = ({ song, setSong }) => {
 
           </div>
           {showJudgementOutput && (
-            <div className="flex flex-col justify-center capitalize items-center ml-8">
+            <div className="flex flex-col justify-center items-center ml-8">
               <div className="mt-4 p-4 bg-spotifyGrey rounded-lg shadow-md text-center text-white max-w-md w-full">
-                <span className="text-lg font-bold text-spotifyLightGrey block mb-2">
+                <span className="text-lg font-bold text-spotifyLightGrey capitalize block mb-2">
                   Here's what we think about your improvised piece:
                 </span>
                 <div className="whitespace-pre-wrap break-words">

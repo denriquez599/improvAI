@@ -25,6 +25,7 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
   const [selectedSongs, setSelectedSongs] = useState<Set<string>>(new Set());
   const [showPopup, setShowPopup] = useState(false);
   const [lessonName, setLessonName] = useState('');
+  const [lessonNotes, setLessonNotes] = useState('');
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
   const router = useRouter();
 
@@ -46,8 +47,8 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
       prev.includes(name) ? prev.filter((n) => n !== name) : [...prev, name]
     );
   };
-  
-  function handleSaveClick() { 
+
+  function handleSaveClick() {
     setShowPopup(false);
     setPage("Portal");
   }
@@ -74,9 +75,8 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
             <button
               key={song.id}
               onClick={() => makingPlan && toggleSong(song.id)}
-              className={`bg-spotifyGrey rounded-md shadow-md p-4 flex flex-col items-center transition-opacity duration-200 ${
-                makingPlan && !isSelected ? 'opacity-50' : 'opacity-100'
-              }`}
+              className={`bg-spotifyGrey rounded-md shadow-md p-4 flex flex-col items-center transition-opacity duration-200 ${makingPlan && !isSelected ? 'opacity-50' : 'opacity-100'
+                }`}
             >
               <div className="w-full h-48 overflow-hidden rounded-md mb-2">
                 <img
@@ -131,6 +131,12 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
                 value={lessonName}
                 onChange={(e) => setLessonName(e.target.value)}
                 placeholder="Lesson Name"
+                className="w-full p-2 rounded bg-zinc-800 text-white border border-gray-700"
+              />
+              <textarea
+                value={lessonNotes}
+                onChange={(e) => setLessonNotes(e.target.value)}
+                placeholder="Notes For Your Students"
                 className="w-full p-2 rounded bg-zinc-800 text-white border border-gray-700"
               />
               <div className="max-h-32 overflow-y-auto border border-gray-700 rounded bg-zinc-800 text-white p-2">

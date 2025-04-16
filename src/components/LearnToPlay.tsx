@@ -9,16 +9,22 @@ interface LearnToPlayProps {
 
 const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
     const [showJudgementOutput, setShowJudgementOutput] = useState(false);
-    const [userPitchScore, setUserPitchScore] = useState<number>(0);
-    const [userIntonationScore, setUserIntonationScore] = useState<number>(0);
-    const [userOverallScore, setUserOverallScore] = useState<number>(0);
-    const [userTempoScore, setUserTempoScore] = useState<number>(0);
+    const [userPitchScore, setUserPitchScore] = useState<string>("0");
+    const [userIntonationScore, setUserIntonationScore] = useState<string>("0");
+    const [userOverallScore, setUserOverallScore] = useState<string>("0");
+    const [userTempoScore, setUserTempoScore] = useState<string>("0");
     const [userTextResults, setUserTextResults] = useState<string>("");
 
     const [songIsPlaying, setSongIsPlaying] = useState(false);
     const audioRef = useRef<HTMLAudioElement | null>(null);
 
     const [isRecording, setIsRecording] = useState(false);
+
+    useEffect(() => {
+        const audio = new Audio(song.wav);
+        audio.loop = true;
+        audioRef.current = audio;
+    }, [song]);
 
     // On startup, create the audioRef
     useEffect(() => {
@@ -81,10 +87,10 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
 
     // Call to update score variables with response
     const updateScores = (response: any) => {
-        setUserPitchScore(parseFloat(response.pitch.toFixed(2)))
-        setUserIntonationScore(parseFloat(response.intonation.toFixed(2)));
-        setUserOverallScore(parseFloat(response.overall_score.toFixed(2)));
-        setUserTempoScore(parseFloat(response.tempo.toFixed(2)));
+        setUserPitchScore(response.pitch)
+        setUserIntonationScore(response.intonation);
+        setUserOverallScore(response.overall_score);
+        setUserTempoScore(response.tempo);
         const prettyFeedback = JSON.stringify(response.feedback, null, 2);
         setUserTextResults(prettyFeedback)
     };
@@ -141,9 +147,9 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
 
                     </div>
                     {showJudgementOutput && (
-                        <div className="flex flex-col justify-center capitalize items-center ml-8">
-                            <div className="flex space-x-4 mb-2">
-                                {Object.entries({ 'overall_score': userOverallScore, 'pitch': userPitchScore, 'intonation': userIntonationScore, 'tempo': userTempoScore }).map(([key, value]) => (
+                        <div className="flex flex-col justify-center items-center ml-8">
+                            <div className="flex space-x-4 capitalize mb-2">
+                                {Object.entries({ 'overall score': userOverallScore, 'pitch': userPitchScore, 'intonation': userIntonationScore, 'tempo': userTempoScore }).map(([key, value]) => (
                                     <div
                                         key={key}
                                         className="flex items-center flex-col justify-center w-36 h-36 border-2 rounded-full bg-transparent border-spotifyLightGrey"
@@ -154,7 +160,7 @@ const LearnToPlay: React.FC<LearnToPlayProps> = ({ song, setSong }) => {
                                 ))}
                             </div>
                             <div className="mt-4 p-4 bg-spotifyGrey rounded-lg shadow-md text-center text-white max-w-md w-full">
-                                <span className="text-lg font-bold text-spotifyLightGrey block mb-2">
+                                <span className="text-lg font-bold text-spotifyLightGrey capitalize block mb-2">
                                     Here's what we think:
                                 </span>
                                 <div className="whitespace-pre-wrap break-words">

@@ -161,6 +161,16 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
         </button>
       )}
 
+      {showDownloadButton && downloadUrl && (
+        <a
+          href={downloadUrl}
+          download={useMidiInput ? "recording.mid" : "recording.wav"}
+          className="px-6 py-3 mt-4 mb-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded hover:bg-spotifyLightGrey transition"
+        >
+          Download Previous Recording
+        </a>
+      )}
+
       {/* Toggle Switch for Input Type */}
       <div className="flex items-center">
         <span className="mr-2 text-white">
@@ -181,17 +191,6 @@ const PerformanceRecorder: React.FC<PerformanceRecorderProps> = ({ handleClickRe
           onListeningComplete={onListeningComplete}
           setIsListening={setListeningIndicator}
         />
-      )}
-
-
-      {showDownloadButton && downloadUrl && (
-        <a
-          href={downloadUrl}
-          download={useMidiInput ? "recording.mid" : "recording.wav"}
-          className="px-6 py-3 mt-4 text-xl font-semibold text-white bg-spotifyGrey border border-white rounded hover:bg-spotifyLightGrey transition"
-        >
-          Download Previous Recording
-        </a>
       )}
 
     </div>

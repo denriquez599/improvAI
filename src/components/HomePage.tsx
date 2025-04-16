@@ -69,14 +69,13 @@ const HomePage: React.FC<{ setPage: (page: string) => void, setLessonPlan: (less
               <div key={lessonPlanIndex} className="relative flex-shrink-0">
                 {expandedLessonPlanIndex === lessonPlanIndex ? (
                   <div
-                    className="absolute left-0 top-0 z-10 flex gap-0 cursor-pointer"
+                    className="flex gap-0 cursor-pointer"
                     onClick={() => handleLessonPlanClick(lessonPlanIndex, lessonPlan)}
-                    style={{ width: `${lessonPlan.songs.length * 12}rem` }}
                   >
                     {lessonPlan.songs.map((song, index) => (
                       <div
                         key={index}
-                        className="bg-spotifyGrey pb-2 items-center space-y-2 h-fit w-48"
+                        className="bg-spotifyGrey pb-2 items-center space-y-2 h-fit w-48 flex-shrink-0"
                       >
                         <div className="w-48 h-48 overflow-hidden">
                           <img
@@ -116,12 +115,13 @@ const HomePage: React.FC<{ setPage: (page: string) => void, setLessonPlan: (less
                   </button>
                 )}
                 <h3 className="text-white font-semibold text-center text-ellipsis overflow-hidden whitespace-nowrap w-full mt-2">
-                  {expandedLessonPlanIndex === lessonPlanIndex ? null : lessonPlan.title || "Lesson Folder"}
+                  {lessonPlan.title || "Lesson Folder"}
                 </h3>
               </div>
             ))}
           </div>
         </section>
+
       </main>
     </div>
   );
