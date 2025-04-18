@@ -21,14 +21,19 @@ type Props = {
   page: string;
 };
 
-function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
+function SongLibrary({ songArray: initialSongs, setPage, makingPlan = false }: Props) {
   const [selectedSongs, setSelectedSongs] = useState<Set<string>>(new Set());
   const [showPopup, setShowPopup] = useState(false);
   const [lessonName, setLessonName] = useState('');
   const [lessonNotes, setLessonNotes] = useState('');
   const [selectedStudents, setSelectedStudents] = useState<string[]>([]);
+  const [songs, setSongs] = useState(initialSongs);
+  const [showAddSongPopup, setShowAddSongPopup] = useState(false);
+  const [newSongName, setNewSongName] = useState('');
+  const [newSongCoverFile, setNewSongCoverFile] = useState<File | null>(null);
+  const [newSongWavFile, setNewSongWavFile] = useState<File | null>(null);
+  const [newSongArtist, setNewSongArtist] = useState('');
   const router = useRouter();
-
 
   const toggleSong = (id: string) => {
     setSelectedSongs((prev) => {
@@ -50,10 +55,35 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
 
   function handleSaveClick() {
     setShowPopup(false);
-    setPage("Portal");
   }
 
-  const selectedSongArray = songArray.filter(song => selectedSongs.has(song.id));
+  function handleAddSong() {
+    if (!newSongName || !newSongCoverFile || !newSongWavFile || !newSongArtist) return;
+
+    const coverUrl = URL.createObjectURL(newSongCoverFile);
+    const wavUrl = URL.createObjectURL(newSongWavFile);
+
+    const newSong: Song = {
+      title: newSongName,
+      cover: coverUrl,
+      midi: '',
+      artist: newSongArtist,
+      wav: wavUrl,
+      beatsPerMeasure: 4,
+      beatsPerMinute: 120,
+      type: 'improv',
+      id: Date.now().toString(),
+    };
+
+    setSongs([...songs, newSong]);
+    setShowAddSongPopup(false);
+    setNewSongName('');
+    setNewSongCoverFile(null);
+    setNewSongWavFile(null);
+    setNewSongArtist('');
+  }
+
+  const selectedSongArray = songs.filter(song => selectedSongs.has(song.id));
 
   return (
     <div className="w-full h-full overflow-y-auto p-4 relative">
@@ -69,7 +99,7 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
         )}
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-        {songArray.map((song) => {
+        {songs.map((song) => {
           const isSelected = selectedSongs.has(song.id);
           return (
             <button
@@ -92,7 +122,7 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
             </button>
           );
         })}
-        <button>
+        <button onClick={() => setShowAddSongPopup(true)}>
           <div className="bg-spotifyGrey rounded-md shadow-md p-4 h-full flex flex-col text-center items-center">
             <h3 className="text-white font-semibold text-center justify-center text-ellipsis h-full overflow-hidden whitespace-nowrap w-full">
               Add New Song
@@ -101,7 +131,56 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
         </button>
       </div>
 
-      {/* Popup */}
+      {/* Add Song Popup */}
+      {showAddSongPopup && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+          <div className="bg-zinc-900 rounded-xl shadow-lg p-6 w-[90%] max-w-md relative">
+            <button
+              className="absolute top-2 right-2 text-white text-xl hover:text-red-400"
+              onClick={() => setShowAddSongPopup(false)}
+            >
+              &times;
+            </button>
+            <h3 className="text-white text-lg font-bold mb-4">Add New Song</h3>
+            <div className="flex flex-col gap-4">
+              <input
+                type="text"
+                value={newSongName}
+                onChange={(e) => setNewSongName(e.target.value)}
+                placeholder="Song Name"
+                className="p-2 rounded bg-zinc-800 text-white border border-gray-700"
+              />
+              <input
+                type="text"
+                value={newSongArtist}
+                onChange={(e) => setNewSongArtist(e.target.value)}
+                placeholder="Artist"
+                className="p-2 rounded bg-zinc-800 text-white border border-gray-700"
+              />
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setNewSongCoverFile(e.target.files?.[0] || null)}
+                className="p-2 rounded bg-zinc-800 text-white border border-gray-700"
+              />
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={(e) => setNewSongWavFile(e.target.files?.[0] || null)}
+                className="p-2 rounded bg-zinc-800 text-white border border-gray-700"
+              />
+              <button
+                onClick={handleAddSong}
+                className="w-full h-10 bg-spotifyGreen hover:scale-105 text-white font-semibold rounded border-2 border-white hover:opacity-90"
+              >
+                Save Song
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Lesson Plan Popup */}
       {showPopup && (
         <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
           <div className="bg-zinc-900 rounded-xl shadow-lg p-6 w-[90%] max-w-md relative">
@@ -154,7 +233,7 @@ function SongLibrary({ songArray, setPage, makingPlan = false }: Props) {
                 ))}
               </div>
               <button onClick={handleSaveClick} className='mt-2 w-full h-10 bg-spotifyGreen hover:scale-105 text-white font-semibold rounded border-2 border-white hover:opacity-90'>
-                Save
+                Save Lesson Plan
               </button>
             </div>
           </div>

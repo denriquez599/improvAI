@@ -6,9 +6,10 @@ interface SidebarProps {
   setPage: (page: string) => void;
   setSong: (song: Song) => void;
   setLessonPlan: (lessonPlan: LessonPlan) => void;
+  page: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan }) => {
+const Sidebar: React.FC<SidebarProps> = ({ setPage, setSong, setLessonPlan, page }) => {
   return (
     <aside className="w-1/4 flex-none bg-black p-4 space-y-4 sticky top-0 h-screen overflow-y-auto">      <div>
       <button
